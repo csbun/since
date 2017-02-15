@@ -3,6 +3,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Editor from './Editor';
 
 const styles = {
   playground: {
@@ -19,7 +20,9 @@ export default class App extends Component {
   // }
   render() {
     return <View style={styles.playground}>
-      <Text>Hello3!!!!!</Text>
+      <Text></Text>
+      <Text>Hello5!!!!!</Text>
+      <Editor />
     </View>;
   }
 }
