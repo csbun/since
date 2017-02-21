@@ -1,9 +1,5 @@
-export const HOME = 'PAGE:HOME';
+export const HOME = 'PAGE_HOME';
 
-export const DETAIL = 'PAGE:DETAIL';
-export function detail(id) {
-  return `${DETAIL}:${id}`;
-}
+export const DETAIL = 'PAGE_DETAIL';
 
-
-export const CREATE = 'PAGE:CREATE';
+export const CREATE = 'PAGE_CREATE';

@@ -20,6 +20,20 @@ const customMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May',
 
 
 export default class Editor extends Component {
+  static navigationOptions = {
+    title: 'Item',
+    // // Or the title string may be a function of the navigation prop:
+    // title: ({ state }) => `Chat with ${state.params.user}`
+    header({ goBack }) {
+      return {
+        right: <Button
+          title="Done"
+          onPress={() => goBack()}
+        />,
+      }
+    },
+  }
+
   constructor() {
     super();
     this.state = {

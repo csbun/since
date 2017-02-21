@@ -1,6 +1,6 @@
-// http://facebook.github.io/react-native/docs/asyncstorage.html
+import { combineReducers } from 'redux';
+import items from './items';
 
-export default function counter(state = {}, action = {}) {
-  return state;
-}
-// TODO const reducer = combineReducers(reducers);
+export default combineReducers({
+  items,
+});
