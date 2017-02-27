@@ -5,13 +5,13 @@ import {
   Button,
   ListView,
 } from 'react-native';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import { DETAIL } from '../constants/page';
 import ListItem from './list/ListItem';
-import FIREBASE_CONFIG from '../constants/firebase';
+// import FIREBASE_CONFIG from '../constants/firebase';
 
 // Initialize Firebase
-const firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+// const firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
 
 const styles = {
   banner: {
@@ -37,7 +37,7 @@ export default class Home extends Component {
 
   constructor() {
     super();
-    this.itemsRef = firebaseApp.database().ref().child('items');
+    // this.itemsRef = firebaseApp.database().ref().child('items');
     this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,

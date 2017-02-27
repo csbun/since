@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './reducers';
-import App from './components/App.js';
+import ReduxPromise from 'redux-promise';
 
-const store = createStore(reducer);
+import reducer from './reducers';
+import App from './components/App';
+
+const store = applyMiddleware(ReduxPromise)(createStore)(reducer);
 
 export default class AppContainer extends Component {
   render() {
-    return <Provider store={store}>
+    return (<Provider store={store}>
       <App />
-    </Provider>;
+    </Provider>);
   }
 }

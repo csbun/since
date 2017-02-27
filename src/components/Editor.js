@@ -41,15 +41,20 @@ export default class Editor extends Component {
       desc: '',
     };
   }
+
+  onSave() {
+    console.log(this.state);
+  }
+
   render() {
-    return <View style={styles.playground}>
+    return (<View style={styles.playground}>
       <TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
         onChangeText={text => this.setState({ text })}
         value={this.state.text}
       />
       <TextInput
-        style={{height: 80, borderColor: 'gray', borderWidth: 1}}
+        style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
         multiline={true}
         numberOfLines={2}
         onChangeText={desc => this.setState({ desc })}
@@ -78,10 +83,7 @@ export default class Editor extends Component {
         color="#841584"
         accessibilityLabel="Press to save"
       />
-    </View>;
+    </View>);
   }
 
-  onSave() {
-    console.log(this.state);
-  }
 }
