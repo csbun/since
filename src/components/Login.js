@@ -3,28 +3,32 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Text, View, TextInput, Button } from '../utils/react_native_ui';
-// import { Text, View, TextInput, Button } from 'react-native';
+import {
+  Screen,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from '@shoutem/ui';
 import { loginUser, fetchUser, loginWithProvider } from '../actions/firebase';
-
-const browserHistory = {
-  push(dir) {
-    console.log(dir);
-  },
-};
-
+import { REGISTER } from '../constants/page';
 
 class UserLogin extends Component {
 
   static propTypes = {
     loginUser: PropTypes.func.isRequired,
-    // loginWithProvider: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+  }
+
+  static navigationOptions = {
+    title: 'Login',
   }
 
   constructor(props) {
     super(props);
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    // this.loginWithProvider = this.loginWithProvider.bind(this);
     this.state = {
       email: '',
       password: '',
@@ -34,12 +38,11 @@ class UserLogin extends Component {
 
   onFormSubmit() {
     const { email, password } = this.state;
+    this.setState({ message: '' });
     this.props.loginUser({ email, password })
       .then((data) => {
         if (data.payload.errorCode) {
           this.setState({ message: data.payload.errorMessage });
-        } else {
-          browserHistory.push('/profile');
         }
       });
   }
@@ -50,31 +53,31 @@ class UserLogin extends Component {
   //     .then((data) => {
   //       if (data.payload.errorCode) {
   //         this.setState({ message: data.payload.errorMessage });
-  //       } else {
-  //         browserHistory.push('/profile');
   //       }
   //     });
   // }
 
   render() {
-    return (<View>
+    const { navigate } = this.props.navigation;
+
+    return (<Screen style={{ padding: 10 }}>
       <TextInput
-        style={{ borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Email"
         onChangeText={email => this.setState({ email })}
-        value={this.state.email}
       />
       <TextInput
         secureTextEntry
-        style={{ borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Password"
         onChangeText={password => this.setState({ password })}
-        value={this.state.password}
       />
-      <Button onPress={() => { this.onFormSubmit(); }} >
+      <Button styleName="dark" onPress={() => { this.onFormSubmit(); }} >
         <Text>Login</Text>
       </Button>
-
       <Text>{this.state.message}</Text>
-    </View>);
+      <TouchableOpacity
+        onPress={() => navigate(REGISTER)}
+      ><Text>Sign Up For Free!</Text></TouchableOpacity>
+    </Screen>);
   }
 
 }
