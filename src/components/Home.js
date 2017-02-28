@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import {
-  Text,
+  Screen,
   View,
+  Text,
   Button,
   ListView,
-} from 'react-native';
-// import * as firebase from 'firebase';
+} from '@shoutem/ui';
 import { DETAIL } from '../constants/page';
 import ListItem from './list/ListItem';
-// import FIREBASE_CONFIG from '../constants/firebase';
-
-// Initialize Firebase
-// const firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+import { firebaseDb } from '../utils/firebase';
+import {
+  navigation as navigationPropType,
+  currentUser as currentUserPropType,
+} from '../utils/prop_types'
 
 const styles = {
   banner: {
@@ -20,30 +22,29 @@ const styles = {
 };
 
 
-export default class Home extends Component {
-  static navigationOptions = {
-    title: 'Home',
-    // // Or the title string may be a function of the navigation prop:
-    // title: ({ state }) => `Chat with ${state.params.user}`
-    header({ navigate }) {
-      return {
-        right: <Button
-          title="Add"
-          onPress={() => navigate(DETAIL, {})}
-        />,
-      };
-    },
+class Home extends Component {
+  static propTypes = {
+    currentUser: currentUserPropType.isRequired,
+    navigation: navigationPropType.isRequired,
   }
 
-  constructor() {
-    super();
-    // this.itemsRef = firebaseApp.database().ref().child('items');
+  static navigationOptions = {
+    title: 'Home',
+  }
+
+  constructor(props) {
+    super(props);
+    const { uid } = this.props.currentUser;
+    this.itemsRef = firebaseDb.ref().child(`items/${uid}`);
     this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
+      loading: true,
+      items: [],
+      // dataSource: new ListView.DataSource({
+      //   rowHasChanged: (row1, row2) => row1 !== row2,
+      // }),
     };
   }
+
   componentWillMount() {
     this.listenForItems(this.itemsRef);
   }
@@ -61,7 +62,9 @@ export default class Home extends Component {
       });
 
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(items),
+        loading: false,
+        items,
+        // dataSource: this.state.dataSource.cloneWithRows(items),
       });
     });
   }
@@ -72,22 +75,33 @@ export default class Home extends Component {
     );
   }
 
-  addItem() {
-    this.itemsRef.push({ title: `item-${Math.random()}` });
+  goAddItem() {
+    const { navigate } = this.props.navigation;
+    navigate(DETAIL);
+    // this.itemsRef.push({ title: `item-${Math.random()}` });
   }
 
   render() {
-    return (<View>
+    return (<Screen>
       <View style={styles.banner}>
         <Text>TODO</Text>
       </View>
       <ListView
-        dataSource={this.state.dataSource}
+        loading={this.state.loading}
+        data={this.state.items}
         renderRow={this.renderListItem.bind(this)}
         style={styles.listview}
       />
-      <Button title="Add" onPress={this.addItem.bind(this)} />
-    </View>);
+    <Button onPress={this.goAddItem.bind(this)}>
+      <Text>Add</Text>
+    </Button>
+    </Screen>);
   }
 
 }
+
+function mapStateToProps(state) {
+  return { currentUser: state.currentUser };
+}
+
+export default connect(mapStateToProps)(Home);

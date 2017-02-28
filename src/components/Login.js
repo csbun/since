@@ -12,14 +12,15 @@ import {
 } from '@shoutem/ui';
 import { loginUser, fetchUser, loginWithProvider } from '../actions/firebase';
 import { REGISTER } from '../constants/page';
+import {
+  navigation as navigationPropType,
+} from '../utils/prop_types';
 
 class UserLogin extends Component {
 
   static propTypes = {
     loginUser: PropTypes.func.isRequired,
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func.isRequired,
-    }).isRequired,
+    navigation: navigationPropType.isRequired,
   }
 
   static navigationOptions = {

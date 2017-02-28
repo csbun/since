@@ -9,6 +9,9 @@ import Register from './Register';
 import Editor from './Editor';
 import Home from './Home';
 import { HOME, DETAIL, LOGIN, REGISTER } from '../constants/page';
+import {
+  currentUser as currentUserPropType,
+} from '../utils/prop_types';
 
 const AppStackNavigator = StackNavigator({
   [HOME]: { screen: Home },
@@ -27,9 +30,7 @@ const LoginStackNavigator = StackNavigator({
 class App extends Component {
   static propTypes = {
     fetchUser: PropTypes.func.isRequired,
-    currentUser: PropTypes.shape({
-      uid: PropTypes.string,
-    }),
+    currentUser: currentUserPropType,
   }
 
   static defaultProps = {

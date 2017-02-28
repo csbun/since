@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Icon,
-  Text,
+  Spinner,
 } from '@shoutem/ui';
 
 const styles = {
@@ -17,8 +16,7 @@ const styles = {
 export default class Loading extends Component {
   render() {
     return (<View style={styles.centerStyle}>
-      <Icon name="refresh" />
-      <Text>Loading</Text>
+      <Spinner />
     </View>);
   }
 }
