@@ -4,7 +4,7 @@ import {
   Spinner,
 } from '@shoutem/ui';
 
-const styles = {
+export const styles = {
   centerStyle: {
     flex: 1,
     flexDirection: 'column',

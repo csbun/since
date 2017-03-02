@@ -1,89 +1,103 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Dimensions } from 'react-native';
 import {
+  Screen,
   Text,
   View,
   TextInput,
   Button,
-} from 'react-native';
-import Calendar from 'react-native-calendar'
+} from '@shoutem/ui';
+import Calendar from 'react-native-calendar-picker';
+import { addItem } from '../actions/items';
+import {
+  navigation as navigationPropType,
+  currentUser as currentUserPropType,
+  // item as itemPropType,
+} from '../utils/prop_types';
+
+const ADAY = 1000 * 60 * 60 * 24;
 
 const styles = {
-  playground: {
-    flex: 1,
+  screen: {
+    padding: 10,
+  },
+  calendar: {
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#fff',
   },
 };
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
+class Editor extends Component {
 
-const customDayHeadings = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const customMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May',
-  'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  static propTypes = {
+    addItem: PropTypes.func.isRequired,
+    navigation: navigationPropType.isRequired,
+    currentUser: currentUserPropType.isRequired,
+  }
 
-
-export default class Editor extends Component {
   static navigationOptions = {
     title: 'Item',
-    // // Or the title string may be a function of the navigation prop:
-    // title: ({ state }) => `Chat with ${state.params.user}`
-    header({ goBack }) {
-      return {
-        right: <Button
-          title="Done"
-          onPress={() => goBack()}
-        />,
-      }
-    },
   }
 
   constructor() {
     super();
+    this.onSave = this.onSave.bind(this);
     this.state = {
-      text: '',
+      title: '',
       desc: '',
+      date: Math.floor(Date.now() / ADAY) * ADAY,
     };
   }
 
   onSave() {
-    console.log(this.state);
+    if (!this.state.title) {
+      return;
+    }
+    const { uid } = this.props.currentUser;
+    this.props.addItem(uid, this.state);
+    this.props.navigation.goBack();
   }
 
   render() {
-    return (<View style={styles.playground}>
+    return (<Screen style={styles.screen}>
       <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        onChangeText={text => this.setState({ text })}
-        value={this.state.text}
+        placeholder="Title"
+        onChangeText={title => this.setState({ title })}
+        value={this.state.title}
       />
       <TextInput
-        style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
-        multiline={true}
+        placeholder="Description"
+        multiline
         numberOfLines={2}
         onChangeText={desc => this.setState({ desc })}
         value={this.state.desc}
       />
-      <Calendar
-        ref="calendar"
-        eventDates={['2017-02-10']}
-        events={[{date: '2017-02-14', hasEventCircle: {backgroundColor: 'powderblue'}}]}
-        scrollEnabled
-        showControls
-        dayHeadings={customDayHeadings}
-        monthNames={customMonthNames}
-        titleFormat={'MMMM YYYY'}
-        prevButtonText={'Prev'}
-        nextButtonText={'Next'}
-        onDateSelect={(date) => this.setState({ selectedDate: date })}
-        onTouchPrev={(e) => console.log('onTouchPrev: ', e)}
-        onTouchNext={(e) => console.log('onTouchNext: ', e)}
-        onSwipePrev={(e) => console.log('onSwipePrev: ', e)}
-        onSwipeNext={(e) => console.log('onSwipeNext', e)}
-      />
+      <View style={styles.calendar}>
+        <Calendar
+          selectedDate={new Date(this.state.date)}
+          selectedDayColor="#61AFEF"
+          screenWidth={SCREEN_WIDTH}
+          onDateChange={(date) => { this.setState({ date: +date }); }}
+        />
+      </View>
       <Button
-        onPress={this.onSave.bind(this)}
-        title="SAVE"
-        color="#841584"
+        onPress={this.onSave}
         accessibilityLabel="Press to save"
-      />
-    </View>);
+      ><Text style={{ color: this.state.title ? '#000' : '#aaa' }}>Save</Text></Button>
+    </Screen>);
   }
-
 }
+
+function mapStateToProps(state) {
+  return { currentUser: state.currentUser };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addItem }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);

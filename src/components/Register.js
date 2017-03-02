@@ -7,7 +7,7 @@ import {
   TextInput,
   Button,
 } from '@shoutem/ui';
-import { registerUser } from '../actions/firebase';
+import { registerUser } from '../actions/user';
 
 class Register extends Component {
 

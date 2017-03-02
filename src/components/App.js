@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
-import { fetchUser } from '../actions/firebase';
+import { fetchUser } from '../actions/user';
 import Loading from './Loading';
 import Login from './Login';
 import Register from './Register';
@@ -18,6 +18,7 @@ const AppStackNavigator = StackNavigator({
   [DETAIL]: { screen: Editor },
 }, {
   initialRouteName: HOME,
+  headerMode: 'screen',
 });
 
 const LoginStackNavigator = StackNavigator({
@@ -50,12 +51,12 @@ class App extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchUser }, dispatch);
-}
-
 function mapStateToProps(state) {
   return { currentUser: state.currentUser };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchUser }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

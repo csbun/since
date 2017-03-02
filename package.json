@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "ios": "react-native run-ios",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
@@ -11,13 +12,14 @@
     "firebase": "^3.6.9",
     "react": "~15.4.0",
     "react-native": "0.41.2",
-    "react-native-calendar": "^0.10.0",
+    "react-native-calendar-picker": "^3.0.0",
     "react-native-linear-gradient": "^2.0.0",
     "react-native-vector-icons": "^4.0.0",
     "react-navigation": "^1.0.0-beta.5",
     "react-redux": "^5.0.2",
     "redux": "^3.6.0",
-    "redux-promise": "^0.5.3"
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

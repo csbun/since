@@ -10,7 +10,7 @@ import {
   Button,
   TouchableOpacity,
 } from '@shoutem/ui';
-import { loginUser, fetchUser, loginWithProvider } from '../actions/firebase';
+import { loginUser, fetchUser, loginWithProvider } from '../actions/user';
 import { REGISTER } from '../constants/page';
 import {
   navigation as navigationPropType,
