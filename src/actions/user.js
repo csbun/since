@@ -11,6 +11,7 @@ import {
   LOGOUT_FIREBASE_USER,
 } from '../constants/firebase';
 
+let isFetchedUser = false;
 
 export function loginWithProvider(provider) {
   const request = FireBaseTools.loginWithProvider(provider);
@@ -37,6 +38,10 @@ export function loginUser(user) {
 }
 
 export function fetchUser() {
+  if (isFetchedUser) {
+    return { type: null };
+  }
+  isFetchedUser = true;
   const request = FireBaseTools.fetchUser();
   return {
     type: FETCH_FIREBASE_USER,

@@ -16,8 +16,7 @@ import {
   currentUser as currentUserPropType,
   // item as itemPropType,
 } from '../utils/prop_types';
-
-const ADAY = 1000 * 60 * 60 * 24;
+import { toMidnightTimeStamp } from '../utils/calculator';
 
 const styles = {
   screen: {
@@ -49,7 +48,7 @@ class Editor extends Component {
     this.state = {
       title: '',
       desc: '',
-      date: Math.floor(Date.now() / ADAY) * ADAY,
+      date: toMidnightTimeStamp(new Date()),
     };
   }
 
@@ -63,6 +62,7 @@ class Editor extends Component {
   }
 
   render() {
+    // console.log(new Date(this.state.date));
     return (<Screen style={styles.screen}>
       <TextInput
         placeholder="Title"
@@ -81,10 +81,11 @@ class Editor extends Component {
           selectedDate={new Date(this.state.date)}
           selectedDayColor="#61AFEF"
           screenWidth={SCREEN_WIDTH}
-          onDateChange={(date) => { this.setState({ date: +date }); }}
+          onDateChange={(date) => { this.setState({ date: toMidnightTimeStamp(date) }); }}
         />
       </View>
       <Button
+        disabled={!this.state.title}
         onPress={this.onSave}
         accessibilityLabel="Press to save"
       ><Text style={{ color: this.state.title ? '#000' : '#aaa' }}>Save</Text></Button>

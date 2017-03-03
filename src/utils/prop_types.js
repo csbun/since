@@ -8,13 +8,10 @@ export const currentUser = PropTypes.shape({
   uid: PropTypes.string.isRequired,
 });
 
-
-export const itemUniqueKey = PropTypes.string.isRequired;
-export const itemTitle = PropTypes.string;
-export const itemDesc = PropTypes.string;
-export const itemDate = PropTypes.number;
-export const item = PropTypes.shape({
-  uniqueKey: itemUniqueKey,
-  title: itemTitle,
-  desc: itemDesc,
-});
+export const itemPropTypesShape = {
+  uniqueKey: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  desc: PropTypes.string,
+  date: PropTypes.number.isRequired,
+};
+export const item = PropTypes.shape(itemPropTypesShape);

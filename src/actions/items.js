@@ -3,6 +3,7 @@ import { firebaseDb } from '../utils/firebase';
 import {
   LOADING,
   LOADED,
+  SELECT_ITEM,
   DONE,
 } from '../constants/items';
 
@@ -35,6 +36,28 @@ export function addItem(userId, item) {
   const itemsRef = itemsRefCache[userId];
   if (itemsRef) {
     itemsRef.push(item);
+    // TODO: push(value, onComplete) returns firebase.database.ThenableReference
+    // https://firebase.google.com/docs/reference/js/firebase.database.Reference#push
   }
   return { type: DONE };
+}
+
+export function removeItem(userId, uniqueKey) {
+  const itemsRef = itemsRefCache[userId];
+  if (itemsRef) {
+    const itemToRemoveRef = itemsRef.child(uniqueKey);
+    if (itemToRemoveRef) {
+      itemToRemoveRef.remove();
+      // TODO: remove(onComplete) returns firebase.Promise containing void
+      // https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove
+    }
+  }
+  return { type: DONE };
+}
+
+export function selectItem(uniqueKey) {
+  return {
+    type: SELECT_ITEM,
+    uniqueKey,
+  };
 }
