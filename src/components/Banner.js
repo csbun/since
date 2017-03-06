@@ -8,19 +8,19 @@ import {
 import { Text } from 'react-native';
 import { daysFromNow, formatDate } from '../utils/calculator';
 import { itemPropType } from '../utils/prop_types';
+import { BLUE, WHITE, LIGHT_GREY, FLEX_CENTER } from '../utils/styles';
 
 const styles = {
-  banner: {
-    padding: 20,
-    height: 220,
-    backgroundColor: '#61AFEF',
-  },
+  banner: Object.assign({
+    minHeight: 210,
+    backgroundColor: BLUE,
+  }, FLEX_CENTER),
   textWhite: {
-    color: '#fff',
+    color: WHITE,
     textAlign: 'center',
   },
   textGray: {
-    color: '#ebebeb',
+    color: LIGHT_GREY,
     textAlign: 'center',
   },
   textHuge: {
@@ -38,7 +38,7 @@ class Banner extends Component {
   }
 
   render() {
-    const { loading, empty, title, date, desc } = this.props;
+    const { loading, empty, title, date } = this.props;
     let content;
     if (loading) {
       content = <Spinner />;
@@ -49,13 +49,12 @@ class Banner extends Component {
     } else {
       const displayDate = formatDate(date);
       content = (<View>
-        <Title style={styles.textWhite}>{title}</Title>
+        <Text style={styles.textGray}>Since {displayDate}</Text>
         <Text style={styles.textWhite}>
           <Text style={styles.textHuge}>{daysFromNow(date)}</Text>
-          <Text>Days ago</Text>
+          <Text>&nbsp;D</Text>
         </Text>
-        <Text style={styles.textGray}>Since {displayDate}</Text>
-        <Text style={styles.textGray}>{desc}</Text>
+        <Title style={styles.textWhite}>{title}</Title>
       </View>);
     }
     return (<View style={styles.banner}>{content}</View>);

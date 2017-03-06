@@ -43,7 +43,6 @@ class App extends Component {
 
   render() {
     const { currentUser } = this.props;
-    console.log(currentUser);
     if (!currentUser) {
       return <Loading />;
     }

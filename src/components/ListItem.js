@@ -21,7 +21,7 @@ const styles = {
     borderColor: '#ddd',
   },
   rowContent: {
-    maxHeight: 56,
+    // maxHeight: 56,
   },
 };
 

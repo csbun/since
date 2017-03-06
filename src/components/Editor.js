@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Dimensions } from 'react-native';
+import moment from 'moment';
 import {
   Screen,
   Text,
@@ -9,7 +9,7 @@ import {
   TextInput,
   Button,
 } from '@shoutem/ui';
-import Calendar from 'react-native-calendar-picker';
+import Calendar from 'react-native-calendar-datepicker';
 import { addItem } from '../actions/items';
 import {
   navigation as navigationPropType,
@@ -17,18 +17,21 @@ import {
   // item as itemPropType,
 } from '../utils/prop_types';
 import { toMidnightTimeStamp } from '../utils/calculator';
+import calendarStyles from '../utils/calendar_styles';
 
 const styles = {
   screen: {
     padding: 10,
+    flexGrow: 1,
   },
   calendar: {
-    marginTop: 5,
+    flexGrow: 1,
+    // marginTop: 5,
     marginBottom: 5,
     backgroundColor: '#fff',
   },
 };
-const SCREEN_WIDTH = Dimensions.get('window').width;
+
 
 class Editor extends Component {
 
@@ -47,7 +50,7 @@ class Editor extends Component {
     this.onSave = this.onSave.bind(this);
     this.state = {
       title: '',
-      desc: '',
+      // desc: '',
       date: toMidnightTimeStamp(new Date()),
     };
   }
@@ -69,20 +72,15 @@ class Editor extends Component {
         onChangeText={title => this.setState({ title })}
         value={this.state.title}
       />
-      <TextInput
-        placeholder="Description"
-        multiline
-        numberOfLines={2}
-        onChangeText={desc => this.setState({ desc })}
-        value={this.state.desc}
-      />
-      <View style={styles.calendar}>
-        <Calendar
-          selectedDate={new Date(this.state.date)}
-          selectedDayColor="#61AFEF"
-          screenWidth={SCREEN_WIDTH}
-          onDateChange={(date) => { this.setState({ date: toMidnightTimeStamp(date) }); }}
-        />
+      <View style={{flexDirection: 'row'}}>
+        <View style={styles.calendar}>
+          <Calendar
+            {...calendarStyles}
+            minDate={moment('1985-01-01').startOf('day')}
+            selected={new Date(this.state.date)}
+            onChange={(date) => { this.setState({ date }); }}
+          />
+        </View>
       </View>
       <Button
         disabled={!this.state.title}
