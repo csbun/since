@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 import {
   Screen,
   Text,
-  View,
   TextInput,
   Button,
 } from '@shoutem/ui';
-import Calendar from 'react-native-calendar-datepicker';
 import { addItem } from '../actions/items';
 import {
   navigation as navigationPropType,
@@ -17,18 +14,17 @@ import {
   // item as itemPropType,
 } from '../utils/prop_types';
 import { toMidnightTimeStamp } from '../utils/calculator';
-import calendarStyles from '../utils/calendar_styles';
+import DatePicker from './DatePicker';
 
 const styles = {
   screen: {
     padding: 10,
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   calendar: {
-    flexGrow: 1,
+    // flexGrow: 1,
     // marginTop: 5,
     marginBottom: 5,
-    backgroundColor: '#fff',
   },
 };
 
@@ -45,14 +41,15 @@ class Editor extends Component {
     title: 'Item',
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.onSave = this.onSave.bind(this);
-    this.state = {
+    // TODO: how props from navigate?
+    this.state = Object.assign({
       title: '',
       // desc: '',
       date: toMidnightTimeStamp(new Date()),
-    };
+    }, props.navigation.state.params);
   }
 
   onSave() {
@@ -65,6 +62,7 @@ class Editor extends Component {
   }
 
   render() {
+    // let endDate = !this.state.uniqueKey ? null : <View />;
     // console.log(new Date(this.state.date));
     return (<Screen style={styles.screen}>
       <TextInput
@@ -72,16 +70,11 @@ class Editor extends Component {
         onChangeText={title => this.setState({ title })}
         value={this.state.title}
       />
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.calendar}>
-          <Calendar
-            {...calendarStyles}
-            minDate={moment('1985-01-01').startOf('day')}
-            selected={new Date(this.state.date)}
-            onChange={(date) => { this.setState({ date }); }}
-          />
-        </View>
-      </View>
+      <DatePicker
+        style={styles.calendar}
+        defaultDate={this.state.date}
+        onChange={date => this.setState({ date })}
+      />
       <Button
         disabled={!this.state.title}
         onPress={this.onSave}

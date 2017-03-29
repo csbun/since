@@ -8,11 +8,11 @@ import Login from './Login';
 import Register from './Register';
 import Editor from './Editor';
 import Home from './Home';
-import { HOME, DETAIL, LOGIN, REGISTER } from '../constants/page';
+import { HOME, EDITOR, LOGIN, REGISTER } from '../constants/page';
 
 const AppStackNavigator = StackNavigator({
   [HOME]: { screen: Home },
-  [DETAIL]: { screen: Editor },
+  [EDITOR]: { screen: Editor },
 }, {
   initialRouteName: HOME,
   headerMode: 'screen',

@@ -8,7 +8,7 @@ import {
   ListView,
 } from '@shoutem/ui';
 import { fetchItems } from '../actions/items';
-import { DETAIL } from '../constants/page';
+import { EDITOR } from '../constants/page';
 import ListItem from './ListItem';
 import Banner from './Banner';
 import {
@@ -34,27 +34,36 @@ class Home extends Component {
     },
   }
 
+  constructor(prop) {
+    super(prop);
+    this.goEdit = this.goEdit.bind(this);
+  }
+
   componentWillMount() {
     const { uid } = this.props.currentUser;
     this.props.fetchItems(uid);
   }
 
-  goAddItem() {
+  goEdit(item) {
     const { navigate } = this.props.navigation;
-    navigate(DETAIL);
+    navigate(EDITOR, item);
+  }
+
+  goAddItem() {
+    this.goEdit();
   }
 
   render() {
     const { list, loading } = this.props.items;
 
     return (<Screen>
-      <Banner />
+      <Banner goEdit={this.goEdit} />
       <ListView
         loading={loading}
         data={list}
         renderRow={item => <ListItem {...item} />}
       />
-      <Button onPress={this.goAddItem.bind(this)}>
+      <Button onPress={this.goAddItem}>
         <Text>Add</Text>
       </Button>
     </Screen>);
