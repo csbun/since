@@ -1,5 +1,5 @@
 // https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
-import { firebaseDb } from '../utils/firebase';
+import { baasDb } from '../utils/baas';
 import {
   LOADING,
   LOADED,
@@ -14,7 +14,7 @@ export function fetchItems(userId) {
   if (itemsRef) {
     return { type: DONE };
   }
-  itemsRef = firebaseDb.ref().child(`items/user-${userId}`);
+  itemsRef = baasDb.ref().child(`items/user-${userId}`);
   itemsRefCache[userId] = itemsRef;
   return (dispatch) => {
     dispatch({ type: LOADING });
@@ -23,7 +23,8 @@ export function fetchItems(userId) {
       const list = [];
       snap.forEach((child) => {
         const val = child.val();
-        val.uniqueKey = child.key;
+        // wilddog: child.key(); firebase: child.key;
+        val.uniqueKey = typeof child.key === 'function' ? child.key() : child.key;
         list.unshift(val);
       });
       dispatch({ type: LOADED, list });

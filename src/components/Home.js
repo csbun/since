@@ -37,6 +37,7 @@ class Home extends Component {
   constructor(prop) {
     super(prop);
     this.goEdit = this.goEdit.bind(this);
+    this.goAddItem = this.goAddItem.bind(this);
   }
 
   componentWillMount() {

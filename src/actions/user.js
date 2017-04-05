@@ -1,82 +1,60 @@
 // https://github.com/btomashvili/react-redux-firebase-boilerplate/blob/master/src/app/actions/firebase_actions.js
-import FireBaseTools from '../utils/firebase';
+import { AsyncStorage } from 'react-native';
+import Baas from '../utils/baas';
 import {
-  LOGIN_WITH_PROVIDER_FIREBASE,
-  REGISTER_FIREBASE_USER,
-  LOGIN_FIREBASE_USER,
-  FETCH_FIREBASE_USER,
-  UPDATE_FIREBASE_USER,
-  CHANGE_FIREBASE_USER_PASSWORD,
-  FIREBASE_PASSWORD_RESET_EMAIL,
-  LOGOUT_FIREBASE_USER,
-} from '../constants/firebase';
+  FETCH_USER,
+  REGISTER_USER,
+  LOGIN_USER,
+  LOGOUT_USER,
+} from '../constants/user';
 
-let isFetchedUser = false;
 
-export function loginWithProvider(provider) {
-  const request = FireBaseTools.loginWithProvider(provider);
-  return {
-    type: LOGIN_WITH_PROVIDER_FIREBASE,
-    payload: request,
-  };
+const STORAGE_KEY_USER = '@AsyncStorage:action:fetchUser';
+const STORAGE_TIME_USER = 1000 * 60 * 60 * 24 * 30; // 30 Days
+function cacheUser(data) {
+  AsyncStorage.setItem(STORAGE_KEY_USER, JSON.stringify({
+    expired: Date.now() + STORAGE_TIME_USER,
+    data,
+  }));
+  return data;
 }
 
 export function registerUser(user) {
-  const request = FireBaseTools.registerUser(user);
+  const request = Baas.registerUser(user);
   return {
-    type: REGISTER_FIREBASE_USER,
+    type: REGISTER_USER,
     payload: request,
   };
 }
 
 export function loginUser(user) {
-  const request = FireBaseTools.loginUser(user);
+  const request = Baas.loginUser(user).then(cacheUser);
   return {
-    type: LOGIN_FIREBASE_USER,
+    type: LOGIN_USER,
     payload: request,
+  };
+}
+
+export function logoutUser() {
+  return {
+    type: LOGOUT_USER,
+    payload: Baas.logoutUser(),
   };
 }
 
 export function fetchUser() {
-  if (isFetchedUser) {
-    return { type: null };
-  }
-  isFetchedUser = true;
-  const request = FireBaseTools.fetchUser();
-  return {
-    type: FETCH_FIREBASE_USER,
-    payload: request,
-  };
-}
+  const request = AsyncStorage.getItem(STORAGE_KEY_USER)
+    .then((resString) => {
+      const res = JSON.parse(resString);
+      if (!res || res.expired < Date.now()) {
+        throw new Error('expired');
+      }
+      return res.data;
+    })
+    .catch(() => Baas.fetchUser().then(cacheUser));
 
-export function updateUser(user) {
-  const request = FireBaseTools.updateUserProfile(user);
   return {
-    type: UPDATE_FIREBASE_USER,
-    payload: request,
-  };
-}
-
-export function changePassword(newPassword) {
-  const request = FireBaseTools.changePassword(newPassword);
-  return {
-    type: CHANGE_FIREBASE_USER_PASSWORD,
-    payload: request,
-  };
-}
-
-export function resetPasswordEmail(email) {
-  const request = FireBaseTools.resetPasswordEmail(email);
-  return {
-    type: FIREBASE_PASSWORD_RESET_EMAIL,
-    payload: request,
-  };
-}
-
-export function logoutUser(user) {
-  const request = FireBaseTools.logoutUser(user);
-  return {
-    type: LOGOUT_FIREBASE_USER,
+    type: FETCH_USER,
     payload: request,
   };
 }
