@@ -6,8 +6,20 @@ import {
   SELECT_ITEM,
   DONE,
 } from '../constants/items';
+import { itemPropTypesShape } from '../utils/prop_types';
 
 const itemsRefCache = {};
+
+const itemPropTypes = Object.keys(itemPropTypesShape);
+function clearItem(obj) {
+  const out = {};
+  itemPropTypes.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      out[key] = obj[key];
+    }
+  });
+  return out;
+}
 
 export function fetchItems(userId) {
   let itemsRef = itemsRefCache[userId];
@@ -36,7 +48,7 @@ export function fetchItems(userId) {
 export function addItem(userId, item) {
   const itemsRef = itemsRefCache[userId];
   if (itemsRef) {
-    itemsRef.push(item);
+    itemsRef.push(clearItem(item));
     // TODO: push(value, onComplete) returns firebase.database.ThenableReference
     // https://firebase.google.com/docs/reference/js/firebase.database.Reference#push
   }
@@ -45,12 +57,26 @@ export function addItem(userId, item) {
 
 export function removeItem(userId, uniqueKey) {
   const itemsRef = itemsRefCache[userId];
-  if (itemsRef) {
+  if (itemsRef && uniqueKey) {
     const itemToRemoveRef = itemsRef.child(uniqueKey);
     if (itemToRemoveRef) {
       itemToRemoveRef.remove();
       // TODO: remove(onComplete) returns firebase.Promise containing void
       // https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove
+    }
+  }
+  return { type: DONE };
+}
+
+export function updateItem(userId, item) {
+  const itemsRef = itemsRefCache[userId];
+  const { uniqueKey, ...rest } = clearItem(item);
+  if (itemsRef && uniqueKey) {
+    const itemToUpdateRef = itemsRef.child(uniqueKey);
+    if (itemToUpdateRef) {
+      itemToUpdateRef.update(rest);
+      // todo: update() returns wilddog.Promise
+      // https://docs.wilddog.com/sync/Web/api/Reference.html#update
     }
   }
   return { type: DONE };

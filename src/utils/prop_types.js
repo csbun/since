@@ -13,5 +13,7 @@ export const itemPropTypesShape = {
   title: PropTypes.string.isRequired,
   // desc: PropTypes.string,
   date: PropTypes.number.isRequired,
+  stopTracking: PropTypes.bool,
+  endDate: PropTypes.number,
 };
 export const item = PropTypes.shape(itemPropTypesShape);

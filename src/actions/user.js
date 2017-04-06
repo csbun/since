@@ -8,7 +8,7 @@ import {
   LOGOUT_USER,
 } from '../constants/user';
 
-
+// TODO: 本地缓存的话时间服务器已经丢失登陆状态，会导致获取数据权限失败
 const STORAGE_KEY_USER = '@AsyncStorage:action:fetchUser';
 const STORAGE_TIME_USER = 1000 * 60 * 60 * 24 * 30; // 30 Days
 function cacheUser(data) {
@@ -17,6 +17,10 @@ function cacheUser(data) {
     data,
   }));
   return data;
+}
+function removeUserCache(...args) {
+  AsyncStorage.removeItem(STORAGE_KEY_USER);
+  return args;
 }
 
 export function registerUser(user) {
@@ -38,11 +42,12 @@ export function loginUser(user) {
 export function logoutUser() {
   return {
     type: LOGOUT_USER,
-    payload: Baas.logoutUser(),
+    payload: Baas.logoutUser().then(removeUserCache),
   };
 }
 
 export function fetchUser() {
+  // TODO: NO user cache
   const request = AsyncStorage.getItem(STORAGE_KEY_USER)
     .then((resString) => {
       const res = JSON.parse(resString);
@@ -53,6 +58,7 @@ export function fetchUser() {
     })
     .catch(() => Baas.fetchUser().then(cacheUser));
 
+  // const request = Baas.fetchUser();
   return {
     type: FETCH_USER,
     payload: request,

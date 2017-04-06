@@ -3,8 +3,11 @@ import moment from 'moment';
 import Calendar from 'react-native-calendar-datepicker';
 import {
   View,
+  TextInput,
+  TouchableOpacity,
 } from '@shoutem/ui';
 import calendarStyles from '../utils/calendar_styles';
+import { toMidnightTimeStamp } from '../utils/calculator';
 
 
 const styles = {
@@ -18,35 +21,49 @@ export default class DatePicker extends Component {
   static propTypes = {
     style: PropTypes.object,
     defaultDate: PropTypes.number,
+    showCalendar: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     style: {},
+    showCalendar: false,
     defaultDate: undefined,
   }
 
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
     this.state = {
+      showCalendar: props.showCalendar,
       date: props.defaultDate ? new Date(props.defaultDate) : new Date(),
     };
   }
 
-  onChange(date) {
+  onChange = (date) => {
     this.setState({ date });
-    this.props.onChange(date);
+    this.props.onChange(toMidnightTimeStamp(date));
+    this.toggleCalendar();
+  }
+
+  toggleCalendar = () => {
+    this.setState({
+      showCalendar: !this.state.showCalendar,
+    });
   }
 
   render() {
     return (<View style={Object.assign({}, styles.calendar, this.props.style)}>
-      <Calendar
+      { this.state.showCalendar ? <Calendar
         {...calendarStyles}
         minDate={moment('1985-01-01').startOf('day')}
         selected={this.state.date}
         onChange={this.onChange}
-      />
+      /> : <TouchableOpacity onPress={this.toggleCalendar}>
+        <TextInput
+          editable={false}
+          value={moment(this.state.date).format('YYYY-MM-DD')}
+        />
+      </TouchableOpacity> }
     </View>);
   }
 }

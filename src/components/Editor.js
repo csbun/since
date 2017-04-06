@@ -7,7 +7,8 @@ import {
   TextInput,
   Button,
 } from '@shoutem/ui';
-import { addItem } from '../actions/items';
+import CheckBox from 'react-native-checkbox';
+import { addItem, updateItem } from '../actions/items';
 import {
   navigation as navigationPropType,
   currentUser as currentUserPropType,
@@ -32,38 +33,61 @@ const styles = {
 class Editor extends Component {
 
   static propTypes = {
+    updateItem: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
     navigation: navigationPropType.isRequired,
     currentUser: currentUserPropType.isRequired,
   }
 
   static navigationOptions = {
-    title: 'Item',
+    title: 'Edit',
   }
 
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-    // TODO: how props from navigate?
+    // extend props from navigate when edit existed item
     this.state = Object.assign({
       title: '',
       // desc: '',
       date: toMidnightTimeStamp(new Date()),
+      stopTracking: false,
     }, props.navigation.state.params);
+    this.isEdit = !!this.state.uniqueKey;
   }
 
-  onSave() {
+  onChangeStopTracking = (checked) => {
+    const stopTracking = !checked; // checked 居然是 before 值...
+    let { endDate } = this.state;
+    if (stopTracking && !endDate) {
+      endDate = toMidnightTimeStamp(new Date());
+    }
+    this.setState({ stopTracking, endDate });
+  }
+
+  onSave = () => {
     if (!this.state.title) {
       return;
     }
     const { uid } = this.props.currentUser;
-    this.props.addItem(uid, this.state);
+    if (this.isEdit) {
+      this.props.updateItem(uid, this.state);
+    } else {
+      this.props.addItem(uid, this.state);
+    }
     this.props.navigation.goBack();
   }
 
   render() {
-    // let endDate = !this.state.uniqueKey ? null : <View />;
-    // console.log(new Date(this.state.date));
+    const stopTrackingCheckbox = this.isEdit ? (<CheckBox
+      label="Stop tracking this Event"
+      checked={this.state.stopTracking}
+      onChange={this.onChangeStopTracking}
+    />) : null;
+    const endDatePicker = this.state.stopTracking ? (<DatePicker
+      style={styles.calendar}
+      defaultDate={this.state.endDate}
+      onChange={endDate => this.setState({ endDate })}
+    />) : null;
     return (<Screen style={styles.screen}>
       <TextInput
         placeholder="Title"
@@ -73,8 +97,11 @@ class Editor extends Component {
       <DatePicker
         style={styles.calendar}
         defaultDate={this.state.date}
+        showCalendar={!this.isEdit}
         onChange={date => this.setState({ date })}
       />
+      { stopTrackingCheckbox }
+      { endDatePicker }
       <Button
         disabled={!this.state.title}
         onPress={this.onSave}
@@ -89,7 +116,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem }, dispatch);
+  return bindActionCreators({ addItem, updateItem }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);
