@@ -47,18 +47,18 @@ export function logoutUser() {
 }
 
 export function fetchUser() {
-  // TODO: NO user cache
-  const request = AsyncStorage.getItem(STORAGE_KEY_USER)
-    .then((resString) => {
-      const res = JSON.parse(resString);
-      if (!res || res.expired < Date.now()) {
-        throw new Error('expired');
-      }
-      return res.data;
-    })
-    .catch(() => Baas.fetchUser().then(cacheUser));
+  // // TODO: NO user cache
+  // const request = AsyncStorage.getItem(STORAGE_KEY_USER)
+  //   .then((resString) => {
+  //     const res = JSON.parse(resString);
+  //     if (!res || res.expired < Date.now()) {
+  //       throw new Error('expired');
+  //     }
+  //     return res.data;
+  //   })
+  //   .catch(() => Baas.fetchUser().then(cacheUser));
 
-  // const request = Baas.fetchUser();
+  const request = Baas.fetchUser();
   return {
     type: FETCH_USER,
     payload: request,

@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from '@shoutem/ui';
 import { Text } from 'react-native';
-import { daysFromNow, formatDate } from '../utils/calculator';
+import { daysSinceByItem, formatDate } from '../utils/calculator';
 import { itemPropType } from '../utils/prop_types';
 import { BLUE, WHITE, LIGHT_GREY, FLEX_CENTER } from '../utils/styles';
 
@@ -64,23 +64,25 @@ class Banner extends Component {
   // }
 
   render() {
-    const { loading, empty, title, date } = this.props;
+    const { loading, empty, title, date, stopTracking, endDate } = this.props;
     let content;
     if (loading) {
-      content = <Spinner />;
+      content = <Spinner style={styles.bannerContent} />;
     } else if (empty) {
-      content = (<Title style={styles.textWhite}>
-        Press Add and Enjoy!
-      </Title>);
-    } else {
-      const displayDate = formatDate(date);
       content = (<View style={styles.bannerContent}>
-        <Text style={styles.textGray}>Since {displayDate}</Text>
+        <Title style={styles.textWhite}>
+          Press Add and Enjoy!
+        </Title>
+      </View>);
+    } else {
+      content = (<View style={styles.bannerContent}>
+        <Title style={styles.textWhite}>{title}</Title>
         <Text style={styles.textWhite}>
-          <Text style={styles.textHuge}>{daysFromNow(date)}</Text>
+          <Text style={styles.textHuge}>{daysSinceByItem(this.props)}</Text>
           <Text>&nbsp;D</Text>
         </Text>
-        <Title style={styles.textWhite}>{title}</Title>
+        <Text style={styles.textGray}>Since {formatDate(date)}</Text>
+        { stopTracking ? <Text style={styles.textGray}>Till {formatDate(endDate)}</Text> : null }
         <TouchableOpacity
           style={styles.editBtn}
           onPress={() => { this.props.goEdit(this.props); }}

@@ -11,7 +11,7 @@ import {
 } from '@shoutem/ui';
 import { selectItem } from '../actions/items';
 import { itemPropTypesShape } from '../utils/prop_types';
-import { daysFromNow, formatDate } from '../utils/calculator';
+import { daysSinceByItem, formatDate } from '../utils/calculator';
 
 const styles = {
   row: {
@@ -45,13 +45,11 @@ class ListItem extends Component {
   }
 
   render() {
-    const since = daysFromNow(this.props.date);
-    const date = formatDate(this.props.date);
     return (<TouchableOpacity onPress={this.selectItem}>
       <Row style={styles.row}>
         <View style={styles.rowContent}>
           <Subtitle>{this.props.title}</Subtitle>
-          <Text>{since} Days ago. (since {date})</Text>
+          <Text>{daysSinceByItem(this.props)} days ({formatDate(this.props.date)})</Text>
         </View>
         <Icon styleName="disclosure" name="right-arrow" />
       </Row>
