@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-
+// TODO: support minDate
 export default class DatePicker extends Component {
   static propTypes = {
     style: PropTypes.object,

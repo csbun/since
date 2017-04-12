@@ -25,6 +25,13 @@ const styles = {
   selectedRow: Object.assign({
     backgroundColor: '#eee',
   }, STYLE_ROW),
+  contentLeft: {
+    flex: 3,
+  },
+  contentRight: {
+    flex: 1,
+    textAlign: 'right',
+  },
 };
 
 class ListItem extends Component {
@@ -33,28 +40,24 @@ class ListItem extends Component {
     ...itemPropTypesShape,
   }
 
-  static defaultProps = {
-    desc: '',
-  }
-
   selectItem = () => {
     this.props.selectItem(this.props.uniqueKey);
   }
 
   render() {
-    const { selectedKey, uniqueKey, title, date, stopTracking, endDate } = this.props;
+    const { selectedKey, uniqueKey, title, date, stopTracking } = this.props;
     const style = selectedKey === uniqueKey ? styles.selectedRow : styles.row;
     return (<TouchableOpacity onPress={this.selectItem}>
       <Row style={style}>
-        <View style={styles.rowContent}>
+        <View style={styles.contentLeft}>
           <Subtitle>{title}</Subtitle>
           <Text>
-            {daysSinceByItem(this.props)} days
-            ( {formatDate(date)}
-            { stopTracking ? ` ⇨ ${formatDate(endDate)}` : '' } )
+            { stopTracking ? 'Ended' : `Since ${formatDate(date)}` }
           </Text>
         </View>
-        <Icon styleName="disclosure" name="right-arrow" />
+        <Text style={styles.contentRight}>
+          { daysSinceByItem(this.props) } Days
+        </Text>
       </Row>
     </TouchableOpacity>);
   }

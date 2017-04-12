@@ -9,7 +9,7 @@ import {
 } from '../constants/user';
 
 // TODO: 本地缓存的话时间服务器已经丢失登陆状态，会导致获取数据权限失败
-const STORAGE_KEY_USER = '@AsyncStorage:action:fetchUser';
+const STORAGE_KEY_USER = '@AsyncStorage:action:user';
 const STORAGE_TIME_USER = 1000 * 60 * 60 * 24 * 30; // 30 Days
 function cacheUser(data) {
   AsyncStorage.setItem(STORAGE_KEY_USER, JSON.stringify({

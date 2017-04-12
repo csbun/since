@@ -11,7 +11,6 @@ export const currentUser = PropTypes.shape({
 export const itemPropTypesShape = {
   uniqueKey: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  // desc: PropTypes.string,
   date: PropTypes.number.isRequired,
   stopTracking: PropTypes.bool,
   endDate: PropTypes.number,

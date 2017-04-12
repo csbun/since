@@ -86,7 +86,7 @@ class Editor extends Component {
     const stopTrackingCheckbox = this.isEdit ? (<CheckBox
       style={styles.checkBox}
       rightText="Stop tracking this Event"
-      checked={this.state.stopTracking}
+      isChecked={this.state.stopTracking}
       onClick={this.onChangeStopTracking}
     />) : null;
     const endDatePicker = this.state.stopTracking ? (<DatePicker
