@@ -11,6 +11,7 @@ import { itemPropTypesShape } from '../utils/prop_types';
 const itemsRefCache = {};
 
 const itemPropTypes = Object.keys(itemPropTypesShape);
+// 净化 item 数据，去除一些不在定义内的字段
 function clearItem(obj) {
   const out = {};
   itemPropTypes.forEach((key) => {
@@ -19,6 +20,12 @@ function clearItem(obj) {
     }
   });
   return out;
+}
+
+// 获取 firebase/wilddog 数据的 key
+function getChildUniqueKey(child) {
+  // wilddog: child.key(); firebase: child.key;
+  return typeof child.key === 'function' ? child.key() : child.key;
 }
 
 export function fetchItems(userId) {
@@ -35,8 +42,7 @@ export function fetchItems(userId) {
       const list = [];
       snap.forEach((child) => {
         const val = child.val();
-        // wilddog: child.key(); firebase: child.key;
-        val.uniqueKey = typeof child.key === 'function' ? child.key() : child.key;
+        val.uniqueKey = getChildUniqueKey(child);
         list.unshift(val);
       });
       dispatch({ type: LOADED, list });
@@ -45,12 +51,25 @@ export function fetchItems(userId) {
 }
 
 
+export function selectItem(uniqueKey) {
+  return {
+    type: SELECT_ITEM,
+    uniqueKey,
+  };
+}
+
 export function addItem(userId, item) {
   const itemsRef = itemsRefCache[userId];
   if (itemsRef) {
-    itemsRef.push(clearItem(item));
-    // TODO: push(value, onComplete) returns firebase.database.ThenableReference
-    // https://firebase.google.com/docs/reference/js/firebase.database.Reference#push
+    return (dispatch) => {
+      itemsRef.push(clearItem(item))
+        .then((child) => {
+          dispatch(selectItem(getChildUniqueKey(child)));
+          return child;
+        });
+      // TODO: push(value, onComplete) returns firebase.database.ThenableReference
+      // https://firebase.google.com/docs/reference/js/firebase.database.Reference#push
+    };
   }
   return { type: DONE };
 }
@@ -80,11 +99,4 @@ export function updateItem(userId, item) {
     }
   }
   return { type: DONE };
-}
-
-export function selectItem(uniqueKey) {
-  return {
-    type: SELECT_ITEM,
-    uniqueKey,
-  };
 }

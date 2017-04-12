@@ -154,6 +154,13 @@
 			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
 			remoteInfo = RNVectorIcons;
 		};
+		3A6728F11E9CED9B00586712 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = since;
+		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
@@ -683,6 +690,7 @@
 			);
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
+				3A6728F21E9CED9B00586712 /* PBXTargetDependency */,
 			);
 			name = "since-tvOSTests";
 			productName = "since-tvOSTests";
@@ -1132,6 +1140,11 @@
 			target = 2D02E47A1E0B4A5D006451C7 /* since-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
+		3A6728F21E9CED9B00586712 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* since */;
+			targetProxy = 3A6728F11E9CED9B00586712 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1215,6 +1228,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.icsbun.since;
 				PRODUCT_NAME = since;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1235,6 +1249,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.icsbun.since;
 				PRODUCT_NAME = since;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

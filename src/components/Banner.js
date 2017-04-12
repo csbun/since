@@ -18,7 +18,7 @@ import { BLUE, WHITE, LIGHT_GREY, FLEX_CENTER } from '../utils/styles';
 
 const styles = {
   banner: {
-    minHeight: 210,
+    minHeight: 250,
     backgroundColor: BLUE,
   },
   bannerContent: FLEX_CENTER,
@@ -82,7 +82,9 @@ class Banner extends Component {
           <Text>&nbsp;D</Text>
         </Text>
         <Text style={styles.textGray}>Since {formatDate(date)}</Text>
-        { stopTracking ? <Text style={styles.textGray}>Till {formatDate(endDate)}</Text> : null }
+        <Text style={styles.textGray}>
+          { stopTracking ? `Till ${formatDate(endDate)}` : '' }
+        </Text>
         <TouchableOpacity
           style={styles.editBtn}
           onPress={() => { this.props.goEdit(this.props); }}

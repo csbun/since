@@ -22,20 +22,20 @@ export default class DatePicker extends Component {
   static propTypes = {
     style: PropTypes.object,
     defaultDate: PropTypes.number,
-    showCalendar: PropTypes.bool,
+    forceShowCalendar: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     style: {},
-    showCalendar: false,
+    forceShowCalendar: false,
     defaultDate: undefined,
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      showCalendar: props.showCalendar,
+      showCalendar: false,
       date: props.defaultDate ? new Date(props.defaultDate) : new Date(),
     };
   }
@@ -54,10 +54,10 @@ export default class DatePicker extends Component {
 
   render() {
     return (<View style={Object.assign({}, styles.calendar, this.props.style)}>
-      { this.state.showCalendar ? <Calendar
+      { this.state.showCalendar || this.props.forceShowCalendar ? <Calendar
         {...calendarStyles}
         minDate={MIN_DATE}
-        maxDate={new Date()}
+        maxDate={moment()}
         selected={this.state.date}
         onChange={this.onChange}
       /> : <TouchableOpacity onPress={this.toggleCalendar}>

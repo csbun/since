@@ -13,16 +13,18 @@ import { selectItem } from '../actions/items';
 import { itemPropTypesShape } from '../utils/prop_types';
 import { daysSinceByItem, formatDate } from '../utils/calculator';
 
+const STYLE_ROW = {
+  paddingTop: 8,
+  paddingBottom: 8,
+  borderBottomWidth: 1,
+  borderColor: '#ddd',
+};
+
 const styles = {
-  row: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  rowContent: {
-    // maxHeight: 56,
-  },
+  row: STYLE_ROW,
+  selectedRow: Object.assign({
+    backgroundColor: '#eee',
+  }, STYLE_ROW),
 };
 
 class ListItem extends Component {
@@ -35,21 +37,22 @@ class ListItem extends Component {
     desc: '',
   }
 
-  constructor(props) {
-    super(props);
-    this.selectItem = this.selectItem.bind(this);
-  }
-
-  selectItem() {
+  selectItem = () => {
     this.props.selectItem(this.props.uniqueKey);
   }
 
   render() {
+    const { selectedKey, uniqueKey, title, date, stopTracking, endDate } = this.props;
+    const style = selectedKey === uniqueKey ? styles.selectedRow : styles.row;
     return (<TouchableOpacity onPress={this.selectItem}>
-      <Row style={styles.row}>
+      <Row style={style}>
         <View style={styles.rowContent}>
-          <Subtitle>{this.props.title}</Subtitle>
-          <Text>{daysSinceByItem(this.props)} days ({formatDate(this.props.date)})</Text>
+          <Subtitle>{title}</Subtitle>
+          <Text>
+            {daysSinceByItem(this.props)} days
+            ( {formatDate(date)}
+            { stopTracking ? ` ⇨ ${formatDate(endDate)}` : '' } )
+          </Text>
         </View>
         <Icon styleName="disclosure" name="right-arrow" />
       </Row>
@@ -57,8 +60,13 @@ class ListItem extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  const { selectedKey } = state;
+  return { selectedKey };
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ selectItem }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(ListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

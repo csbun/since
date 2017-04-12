@@ -1,7 +1,7 @@
 // https://github.com/btomashvili/react-redux-firebase-boilerplate/blob/master/src/app/utils/firebase.js
 /* eslint max-len: 0*/
 import firebase from 'firebase';
-import wilddog from 'wilddog';
+import wilddog from 'wilddog/lib/wilddog-rn-all';
 
 import { CN, WILDDOG_CONFIG, FIREBASE_CONFIG } from '../constants/config';
 
@@ -96,6 +96,19 @@ const BaasTools = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   loginUser: user => baasAuth.signInWithEmailAndPassword(user.email, user.password)
+    .then(userInfo => userInfo)
+    .catch(error => ({
+      errorCode: error.code,
+      errorMessage: error.message,
+    })),
+
+  /**
+   * Log the user in using token
+   *
+   * @param token
+   * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
+   */
+  loginWithToken: token => baasAuth.signInWithCustomToken(token)
     .then(userInfo => userInfo)
     .catch(error => ({
       errorCode: error.code,

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone 7\"",
     "android-adv": "android avd",
     "android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -16,7 +16,7 @@
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-calendar-datepicker": "^1.2.2",
-    "react-native-checkbox": "^1.1.0",
+    "react-native-check-box": "^1.0.4",
     "react-native-linear-gradient": "^2.0.0",
     "react-native-vector-icons": "^4.0.0",
     "react-navigation": "^1.0.0-beta.5",

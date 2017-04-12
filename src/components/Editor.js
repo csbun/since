@@ -7,7 +7,7 @@ import {
   TextInput,
   Button,
 } from '@shoutem/ui';
-import CheckBox from 'react-native-checkbox';
+import CheckBox from 'react-native-check-box';
 import { addItem, updateItem } from '../actions/items';
 import {
   navigation as navigationPropType,
@@ -21,6 +21,10 @@ const styles = {
   screen: {
     padding: 10,
     // flexGrow: 1,
+  },
+  checkBox: {
+    paddingTop: 8,
+    paddingBottom: 10,
   },
   calendar: {
     // flexGrow: 1,
@@ -55,9 +59,10 @@ class Editor extends Component {
     this.isEdit = !!this.state.uniqueKey;
   }
 
-  onChangeStopTracking = (checked) => {
-    const stopTracking = !checked; // checked 居然是 before 值...
-    let { endDate } = this.state;
+  onChangeStopTracking = () => {
+    let { endDate, stopTracking } = this.state;
+    stopTracking = !stopTracking; // toggle
+
     if (stopTracking && !endDate) {
       endDate = toMidnightTimeStamp(new Date());
     }
@@ -79,9 +84,10 @@ class Editor extends Component {
 
   render() {
     const stopTrackingCheckbox = this.isEdit ? (<CheckBox
-      label="Stop tracking this Event"
+      style={styles.checkBox}
+      rightText="Stop tracking this Event"
       checked={this.state.stopTracking}
-      onChange={this.onChangeStopTracking}
+      onClick={this.onChangeStopTracking}
     />) : null;
     const endDatePicker = this.state.stopTracking ? (<DatePicker
       style={styles.calendar}
@@ -97,7 +103,7 @@ class Editor extends Component {
       <DatePicker
         style={styles.calendar}
         defaultDate={this.state.date}
-        showCalendar={!this.isEdit}
+        forceShowCalendar={!this.isEdit}
         onChange={date => this.setState({ date })}
       />
       { stopTrackingCheckbox }
