@@ -4718,9 +4718,9 @@ which@^1.0.5, which@^1.1.1, which@^1.2.9:
   dependencies:
     isexe "^1.1.1"
 
-wilddog@^2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/wilddog/-/wilddog-2.5.4.tgz#f495ad18d0b80b6aee550ad16e6aa1d7b1f4e211"
+wilddog@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/wilddog/-/wilddog-2.5.6.tgz#a0a5ad9bc004bd5a0ce60293f4c402ede826fd28"
   dependencies:
     engine.io-client "1.6.8"
 
