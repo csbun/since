@@ -33,7 +33,7 @@ export function fetchItems(userId) {
   if (itemsRef) {
     return { type: DONE };
   }
-  itemsRef = baasDb.ref().child(`items/user-${userId}`);
+  itemsRef = baasDb.ref().child(`items/${userId}`);
   itemsRefCache[userId] = itemsRef;
   return (dispatch) => {
     dispatch({ type: LOADING });

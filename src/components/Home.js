@@ -38,6 +38,9 @@ class Home extends Component {
     super(prop);
     this.goEdit = this.goEdit.bind(this);
     this.goAddItem = this.goAddItem.bind(this);
+    this.state = {
+      openedItemKey: null,
+    };
   }
 
   componentWillMount() {
@@ -54,15 +57,24 @@ class Home extends Component {
     this.goEdit();
   }
 
-  render() {
-    const { list, loading } = this.props.items;
+  openItem = (openedItemKey) => {
+    this.setState({ openedItemKey });
+  }
 
+  render() {
+    const { currentUser, items } = this.props;
+    const { list, loading } = items;
     return (<Screen>
       <Banner goEdit={this.goEdit} />
       <ListView
         loading={loading}
         data={list}
-        renderRow={item => <ListItem {...item} />}
+        renderRow={item => <ListItem
+          {...item}
+          currentUser={currentUser}
+          openItem={this.openItem}
+          openedKey={this.state.openedItemKey}
+        />}
       />
       <Button onPress={this.goAddItem}>
         <Text>Add</Text>
