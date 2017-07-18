@@ -18,18 +18,12 @@ import { daysSinceByItem, formatDate } from '../utils/calculator';
 
 const styles = {
   row: {
-    // paddingTop: 8,
-    // paddingBottom: 8,
     padding: 8,
     borderBottomWidth: 1,
-    borderRightWidth: 1,
     borderColor: '#ddd',
   },
   selectedRow: {
     backgroundColor: '#eee',
-  },
-  ani: {
-    flexDirection: 'row',
   },
   contentLeft: {
     flex: 3,
@@ -38,9 +32,6 @@ const styles = {
     flex: 1,
     textAlign: 'right',
   },
-  del: {
-    backgroundColor: 'red',
-  },
 };
 
 
@@ -48,7 +39,7 @@ class ListItem extends Component {
   static propTypes = {
     selectItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
-    openItem: PropTypes.func.isRequired,
+    // openItem: PropTypes.func.isRequired,
     // openedKey: PropTypes.string,
     currentUser: currentUserPropType.isRequired,
     ...itemPropTypesShape,
@@ -60,11 +51,9 @@ class ListItem extends Component {
 
   // componentWillMount = () => {
 
-  // }
-
-  selectItem = (open) => {
+  selectItem = () => {
     this.props.selectItem(this.props.uniqueKey);
-    this.props.openItem(open ? this.props.uniqueKey : null);
+    // this.props.openItem(open ? this.props.uniqueKey : null);
   }
 
   deleteItem = () => {
@@ -72,7 +61,7 @@ class ListItem extends Component {
   }
 
   render() {
-    const { selectedKey, uniqueKey, title, date, stopTracking, openItem } = this.props;
+    const { selectedKey, uniqueKey, title, date, stopTracking } = this.props;
     const rowStyle = selectedKey === uniqueKey ? styles.selectedRow : {};
     const swipeoutBtns = [{
       text: 'DELETE',
@@ -80,14 +69,14 @@ class ListItem extends Component {
       type: 'delete',
       onPress: this.deleteItem,
     }];
+    // https://github.com/dancormier/react-native-swipeout
     return (<Swipeout
       right={swipeoutBtns}
       buttonWidth={80}
       autoClose
-      onOpen={() => this.selectItem(true)}
-      onClose={() => openItem()}
+      onClose={this.selectItem}
     >
-      <TouchableOpacity onPress={() => this.selectItem(false)}>
+      <TouchableOpacity onPress={this.selectItem}>
         <Row style={{ ...styles.row, ...rowStyle }}>
           <View style={styles.contentLeft}>
             <Subtitle>{title}</Subtitle>

@@ -47,7 +47,7 @@ export function logoutUser() {
 }
 
 export function fetchUser() {
-  //*
+  // /*
   // TODO: NO user cache
   const request = AsyncStorage.getItem(STORAGE_KEY_USER)
     .then((resString) => {
