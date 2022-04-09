@@ -12,7 +12,7 @@
   "dependencies": {
     "@shoutem/ui": "^0.10.10",
     "firebase": "^3.6.9",
-    "moment": "^2.17.1",
+    "moment": "^2.29.2",
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-calendar-datepicker": "^1.2.2",
