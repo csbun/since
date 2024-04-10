@@ -1,5 +1,6 @@
 import {createContext, useContext} from 'react';
 import uid from '../utils/uid';
+import {setItem} from './Storage';
 
 export type EventItem = {
   id: string;
@@ -10,6 +11,7 @@ export type EventItem = {
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
+export const EVENT_ITEMS_STORAGE_KEY = 'event_items';
 
 export const EventItemsContext = createContext<{
   eventItems: EventItem[];
@@ -27,16 +29,42 @@ export function useEventItems() {
   }
   function prependEventItem(eventItem: Omit<EventItem, 'id'>) {
     const newItem = {id: uid(), ...eventItem};
-    setEventItems(prev => [newItem, ...prev]);
+    setEventItems(prev => {
+      const newList = [newItem, ...prev];
+      console.log(newList);
+      setItem(EVENT_ITEMS_STORAGE_KEY, newList).then();
+      return newList;
+    });
   }
 
   function appendEventItem(eventItem: Omit<EventItem, 'id'>) {
     const newItem = {id: uid(), ...eventItem};
-    setEventItems(prev => [...prev, newItem]);
+    setEventItems(prev => {
+      const newList = [...prev, newItem];
+      setItem(EVENT_ITEMS_STORAGE_KEY, newList).then();
+      return newList;
+    });
   }
 
   function removeEventItem(id: string) {
-    setEventItems(prev => prev.filter(item => item.id !== id));
+    setEventItems(prev => {
+      const newList = prev.filter(item => item.id !== id);
+      setItem(EVENT_ITEMS_STORAGE_KEY, newList).then();
+      return newList;
+    });
+  }
+
+  function editEventItem(newItem: EventItem) {
+    setEventItems(prev => {
+      const newList = prev.map(item => {
+        if (item.id === newItem.id) {
+          return newItem;
+        }
+        return item;
+      });
+      setItem(EVENT_ITEMS_STORAGE_KEY, newList).then();
+      return newList;
+    });
   }
 
   return {
@@ -44,6 +72,7 @@ export function useEventItems() {
     getById,
     prependEventItem,
     appendEventItem,
+    editEventItem,
     removeEventItem,
   };
 }

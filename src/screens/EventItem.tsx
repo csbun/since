@@ -2,15 +2,8 @@ import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DATE_FORMAT, EventItem, useEventItems} from '../context/EventItems';
-import {
-  Button,
-  ButtonGroup,
-  Datepicker,
-  Input,
-  Layout,
-  NativeDateService,
-} from '@ui-kitten/components';
 import Editor from '../components/Editor';
+import EventItemView from '../components/EventItemView';
 
 interface EventItemScreenParams {
   id?: string;
@@ -37,9 +30,5 @@ export default function EventItemScreen(props: Props) {
     return <Editor eventItem={eventItem} />;
   }
 
-  return (
-    <View>
-      <Text>{JSON.stringify(eventItem)}</Text>
-    </View>
-  );
+  return <EventItemView item={eventItem} />;
 }
