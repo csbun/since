@@ -25,9 +25,10 @@ const styles = {
   },
 };
 
-export default function Editor(props: {eventItem?: EventItem}) {
-  const navigation = useNavigation();
-  const {prependEventItem} = useEventItems();
+export default function Editor(props: {
+  eventItem?: EventItem;
+  onSave: (eventItem: Omit<EventItem, 'id'>) => void;
+}) {
   const [title, setTitle] = useState(props.eventItem?.title);
   const [date, setDate] = useState(props.eventItem?.date);
 
@@ -58,12 +59,7 @@ export default function Editor(props: {eventItem?: EventItem}) {
         disabled={!title || !date}
         onPress={() => {
           if (title && date) {
-            prependEventItem({
-              title,
-              date,
-              tags: [],
-            });
-            navigation.goBack();
+            props.onSave({tags: [], ...props.eventItem, title, date});
           }
         }}>
         Save

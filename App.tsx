@@ -18,8 +18,14 @@ import {
   EventItemsContext,
 } from './src/context/EventItems';
 import {getItem} from './src/context/Storage';
+import EventItemEditorScreen, {
+  EVENT_ITEM_EDITOR_SCREEN_NAME,
+  EventItemEditorScreenParamList,
+} from './src/screens/EventItemEditor';
 
-type ScreenParamList = HomeScreenParamList & EventItemScreenParamList;
+type ScreenParamList = HomeScreenParamList &
+  EventItemScreenParamList &
+  EventItemEditorScreenParamList;
 const Stack = createNativeStackNavigator<ScreenParamList>();
 
 function App(): React.JSX.Element {
@@ -49,6 +55,10 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name={EVENT_ITEM_SCREEN_NAME}
               component={EventItemScreen}
+            />
+            <Stack.Screen
+              name={EVENT_ITEM_EDITOR_SCREEN_NAME}
+              component={EventItemEditorScreen}
             />
           </Stack.Navigator>
         </EventItemsContext.Provider>

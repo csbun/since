@@ -54,11 +54,11 @@ export function useEventItems() {
     });
   }
 
-  function editEventItem(newItem: EventItem) {
+  function editEventItem(id: string, newItem: Omit<EventItem, 'id'>) {
     setEventItems(prev => {
       const newList = prev.map(item => {
-        if (item.id === newItem.id) {
-          return newItem;
+        if (item.id === id) {
+          return {...newItem, id};
         }
         return item;
       });
