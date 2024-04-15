@@ -1,6 +1,6 @@
 import React from 'react';
 import {daysSinceByItem, formatDate} from '../utils/calculator';
-import {EventItem, useEventItems} from '../context/EventItems';
+import {EventItem} from '../context/EventItems';
 import {View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {BLUE, WHITE, LIGHT_GREY, FLEX_CENTER} from '../utils/styles';

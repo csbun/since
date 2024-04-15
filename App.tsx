@@ -12,12 +12,7 @@ import EventItemScreen, {
   EVENT_ITEM_SCREEN_NAME,
   EventItemScreenParamList,
 } from './src/screens/EventItem';
-import {
-  EVENT_ITEMS_STORAGE_KEY,
-  EventItem,
-  EventItemsContext,
-} from './src/context/EventItems';
-import {getItem} from './src/context/Storage';
+import {StorageContext} from './src/context/Storage';
 import EventItemEditorScreen, {
   EVENT_ITEM_EDITOR_SCREEN_NAME,
   EventItemEditorScreenParamList,
@@ -30,18 +25,12 @@ const Stack = createNativeStackNavigator<ScreenParamList>();
 
 function App(): React.JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
-  const [eventItems, setEventItems] = useState<EventItem[]>([]);
-
-  useEffect(() => {
-    getItem<EventItem[]>(EVENT_ITEMS_STORAGE_KEY).then(items => {
-      setEventItems(items || []);
-    });
-  });
+  const [store, setStore] = useState<Record<string, any>>({});
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
-        <EventItemsContext.Provider value={{eventItems, setEventItems}}>
+        <StorageContext.Provider value={{store, setStore}}>
           <Stack.Navigator>
             <Stack.Screen
               name={HOME_SCREEN_NAME}
@@ -61,7 +50,7 @@ function App(): React.JSX.Element {
               component={EventItemEditorScreen}
             />
           </Stack.Navigator>
-        </EventItemsContext.Provider>
+        </StorageContext.Provider>
       </NavigationContainer>
     </ApplicationProvider>
   );

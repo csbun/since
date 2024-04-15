@@ -2,15 +2,16 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useEventItems} from '../context/EventItems';
 import {useNavigation} from '@react-navigation/native';
-import {EVENT_ITEM_SCREEN_NAME} from '../screens/EventItem';
 import {Button, List, ListItem, Text} from '@ui-kitten/components';
+import {EVENT_ITEM_EDITOR_SCREEN_NAME} from '../screens/EventItemEditor';
+import {EVENT_ITEM_SCREEN_NAME} from '../screens/EventItem';
 
 function CreateButton() {
   const navigation = useNavigation();
   return (
     <Button
       onPress={() => {
-        navigation.navigate(EVENT_ITEM_SCREEN_NAME, {isEdit: true});
+        navigation.navigate(EVENT_ITEM_EDITOR_SCREEN_NAME, {});
       }}>
       <Text style={styles.createButton}>Create</Text>
     </Button>
@@ -36,7 +37,7 @@ export default function ListView() {
         renderItem={({item}) => (
           <ListItem
             onPress={() => {
-              navigation.navigate('EventItem', {id: item.id});
+              navigation.navigate(EVENT_ITEM_SCREEN_NAME, {id: item.id});
             }}>
             <Text>{item.title}</Text>
           </ListItem>

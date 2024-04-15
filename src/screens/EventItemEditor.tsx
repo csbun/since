@@ -6,7 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 
 interface EventItemEditorScreenParams {
   id?: string;
-  isEdit?: boolean;
 }
 export const EVENT_ITEM_EDITOR_SCREEN_NAME = 'EventItemEditor';
 export type EventItemEditorScreenParamList = {

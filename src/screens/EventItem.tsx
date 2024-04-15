@@ -10,7 +10,6 @@ import {KeyframeList} from '../components/KeyframeList';
 
 interface EventItemScreenParams {
   id?: string;
-  isEdit?: boolean;
 }
 export const EVENT_ITEM_SCREEN_NAME = 'EventItem';
 export type EventItemScreenParamList = {
