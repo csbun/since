@@ -1,4 +1,4 @@
-import {createContext, useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as devalue from 'devalue';
 import uid from '../utils/uid';
@@ -43,6 +43,15 @@ export const StorageContext = createContext<{
   store: {},
   setStore: () => {},
 });
+
+export function StorageContextProvider(props: {children: React.ReactNode}) {
+  const [store, setStore] = useState<Record<string, any>>({});
+  return (
+    <StorageContext.Provider value={{store, setStore}}>
+      {props.children}
+    </StorageContext.Provider>
+  );
+}
 
 export function useStorage<T>(name: string, defaultValue: T) {
   const {store, setStore} = useContext(StorageContext);
@@ -105,5 +114,6 @@ export function useListStorage<T extends {id: string}>(name: string) {
     appendItem,
     editItem,
     removeItem,
+    setListItems,
   };
 }

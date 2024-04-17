@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // import {useColorScheme} from 'react-native';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider} from '@ui-kitten/components';
@@ -12,7 +12,7 @@ import EventItemScreen, {
   EVENT_ITEM_SCREEN_NAME,
   EventItemScreenParamList,
 } from './src/screens/EventItem';
-import {StorageContext} from './src/context/Storage';
+import {StorageContextProvider} from './src/context/Storage';
 import EventItemEditorScreen, {
   EVENT_ITEM_EDITOR_SCREEN_NAME,
   EventItemEditorScreenParamList,
@@ -25,12 +25,11 @@ const Stack = createNativeStackNavigator<ScreenParamList>();
 
 function App(): React.JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
-  const [store, setStore] = useState<Record<string, any>>({});
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
-        <StorageContext.Provider value={{store, setStore}}>
+        <StorageContextProvider>
           <Stack.Navigator>
             <Stack.Screen
               name={HOME_SCREEN_NAME}
@@ -50,7 +49,7 @@ function App(): React.JSX.Element {
               component={EventItemEditorScreen}
             />
           </Stack.Navigator>
-        </StorageContext.Provider>
+        </StorageContextProvider>
       </NavigationContainer>
     </ApplicationProvider>
   );

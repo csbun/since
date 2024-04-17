@@ -19,10 +19,10 @@ type Props = NativeStackScreenProps<
 
 export default function EventItemEditorScreen(props: Props) {
   const navigation = useNavigation();
-  const {getById, prependEventItem, editEventItem} = useEventItems();
+  const {getItemById, prependItem, editItem} = useEventItems();
 
   const eventItem = props.route.params.id
-    ? getById(props.route.params.id)
+    ? getItemById(props.route.params.id)
     : undefined;
 
   return (
@@ -30,9 +30,9 @@ export default function EventItemEditorScreen(props: Props) {
       eventItem={eventItem}
       onSave={item => {
         if (eventItem?.id) {
-          editEventItem(eventItem.id, item);
+          editItem(eventItem.id, item);
         } else {
-          prependEventItem(item);
+          prependItem(item);
         }
         navigation.goBack();
       }}

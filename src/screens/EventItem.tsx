@@ -23,9 +23,9 @@ type Props = NativeStackScreenProps<
 
 export default function EventItemScreen(props: Props) {
   const navigation = useNavigation();
-  const {getById} = useEventItems();
+  const {getItemById} = useEventItems();
   const eventItem = props.route.params.id
-    ? getById(props.route.params.id)
+    ? getItemById(props.route.params.id)
     : undefined;
 
   useEffect(() => {

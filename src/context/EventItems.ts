@@ -23,10 +23,10 @@ export function useEventItems() {
 
   return {
     eventItems: listItems,
-    getById: getItemById,
-    prependEventItem: prependItem,
-    appendEventItem: appendItem,
-    editEventItem: editItem,
-    removeEventItem: removeItem,
+    getItemById,
+    prependItem,
+    appendItem,
+    editItem,
+    removeItem,
   };
 }
