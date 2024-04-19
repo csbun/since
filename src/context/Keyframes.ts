@@ -1,26 +1,34 @@
 import dayjs, {Dayjs} from 'dayjs';
-import {useListStorage} from './Storage';
+// import {useListStorage} from './Storage';
 
-class Keyframe {
+type DiffType =
+  | 'COUNTDOWN_DAYS'
+  | 'COUNTDOWN_YEARS'
+  | 'ANNIVERSARY'
+  | 'HUNDREDS_DAYS';
+
+export class Keyframe {
   id: string;
   date: Dayjs;
+  diffType: DiffType;
+  diff: number;
 
-  constructor(date: Dayjs) {
+  constructor(date: Dayjs, diffType: DiffType, diff: number) {
     this.id = '' + date.valueOf();
     this.date = date;
+    this.diffType = diffType;
+    this.diff = diff;
   }
 }
 
 // export const KEYFRAMES_STORAGE_KEY = 'keyframes';
 
-export function useKeyframes(eventItemId: string, eventItemDate: string) {
+export function useKeyframes(targetDate: string) {
   // const {listItems, ...others} = useListStorage<Keyframe>(
   //   `${KEYFRAMES_STORAGE_KEY}:${eventItemId}`,
   // );
 
-  const keyframes = generateFeatureKeyframesByDate(dayjs(eventItemDate)).map(
-    date => new Keyframe(date),
-  );
+  const keyframes = generateFeatureKeyframesByDate(dayjs(targetDate));
 
   return {
     keyframes,
@@ -32,24 +40,45 @@ export function useKeyframes(eventItemId: string, eventItemDate: string) {
  * 根据日前生成最近一年的关键日期，如 N*100天，N周年等
  */
 function generateFeatureKeyframesByDate(date: Dayjs) {
-  const keyDateList: Dayjs[] = [];
+  const keyDateList: Keyframe[] = [];
   const now = dayjs();
   if (now > date) {
     // 过去的时间，生成最近的百日、周年列表
-    const diffYear = now.diff(date, 'year');
-    keyDateList.push(date.add(diffYear + 1, 'year'));
+    const diffYear = now.diff(date, 'year') + 1;
+    keyDateList.push(
+      new Keyframe(date.add(diffYear, 'year'), 'ANNIVERSARY', diffYear),
+    );
     const diffDay = now.diff(date, 'day');
     if (diffDay < 1000) {
-      const next100 = ((diffDay % 100) + 1) * 100;
-      keyDateList.push(date.add(next100, 'day'));
+      const next100 = (Math.floor(diffDay / 100) + 1) * 100;
+      keyDateList.push(
+        new Keyframe(date.add(next100, 'day'), 'HUNDREDS_DAYS', next100),
+      );
       if (next100 < 1000) {
-        keyDateList.push(date.add(1000, 'day'));
+        keyDateList.push(
+          new Keyframe(date.add(1000, 'day'), 'HUNDREDS_DAYS', 1000),
+        );
       }
     } else {
-      keyDateList.push(date.add((diffDay % 1000) + 1, 'day'));
+      const next1000 = (diffDay % 1000) + 1;
+      keyDateList.push(
+        new Keyframe(date.add(next1000, 'day'), 'ANNIVERSARY', next1000),
+      );
     }
   } else {
-    // TODO: 未来时间，生成最近的100天、1000天的列表
+    // 未来时间，生成最近的100天、整年的列表
+    const maxDiffYear = date.diff(now, 'year');
+    for (let i = 1; i <= maxDiffYear; i++) {
+      keyDateList.push(
+        new Keyframe(date.subtract(i, 'year'), 'COUNTDOWN_YEARS', 1),
+      );
+    }
+    const maxDiff100Days = Math.floor(date.diff(now, 'day') / 100);
+    for (let i = 1; i <= maxDiff100Days; i++) {
+      keyDateList.push(
+        new Keyframe(date.subtract(i * 100, 'day'), 'COUNTDOWN_DAYS', i * 100),
+      );
+    }
   }
-  return keyDateList.sort((a, b) => a.diff(b));
+  return keyDateList.sort((a, b) => a.date.diff(b.date));
 }
