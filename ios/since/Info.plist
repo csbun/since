@@ -48,5 +48,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- react-native-permissions -->
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+  <string>添加提醒事件</string>
 </dict>
 </plist>

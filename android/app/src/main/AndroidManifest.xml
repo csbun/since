@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- https://github.com/zoontek/react-native-permissions/?tab=readme-ov-file#android -->
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
       android:name=".MainApplication"
