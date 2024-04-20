@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as devalue from 'devalue';
 import uid from '../utils/uid';
@@ -29,7 +29,6 @@ export async function getAsyncStorageItem<T>(
 export async function setAsyncStorageItem<T>(key: string, value?: T) {
   // 如果值未定义，则删除存储项；否则，将值序列化后存储。
   if (value !== undefined) {
-    console.log(devalue.stringify(value));
     await AsyncStorage.setItem(key, devalue.stringify(value));
   } else {
     await AsyncStorage.removeItem(key);
@@ -54,23 +53,27 @@ export function StorageContextProvider(props: {children: React.ReactNode}) {
 }
 
 export function useStorage<T>(name: string, defaultValue: T) {
+  const initd = useRef(false);
   const {store, setStore} = useContext(StorageContext);
   const storageKey = `since:storage:${name}`;
 
+  if (!initd.current) {
+    getAsyncStorageItem<T>(storageKey).then(val => {
+      setStore(prev => {
+        return {...prev, [name]: val};
+      });
+    });
+    initd.current = true;
+  }
+
   function setValue(val?: T) {
+    setAsyncStorageItem(storageKey, val).then();
     setStore(prev => {
-      const next = {...prev, [name]: val};
-      setAsyncStorageItem(storageKey, next).then();
-      return next;
+      return {...prev, [name]: val};
     });
   }
 
-  let value = (store[name] as T) || defaultValue;
-  if (store[name] === undefined) {
-    getAsyncStorageItem<T>(name).then(val => {
-      setValue(val);
-    });
-  }
+  const value = (store[name] as T) || defaultValue;
   return {value, setValue};
 }
 

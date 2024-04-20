@@ -1,7 +1,8 @@
 import React from 'react';
 // import {useColorScheme} from 'react-native';
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider} from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen, {
@@ -27,31 +28,34 @@ function App(): React.JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <StorageContextProvider>
-          <Stack.Navigator>
-            <Stack.Screen
-              name={HOME_SCREEN_NAME}
-              component={HomeScreen}
-              options={
-                {
-                  // header: () => null,
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <NavigationContainer>
+          <StorageContextProvider>
+            <Stack.Navigator>
+              <Stack.Screen
+                name={HOME_SCREEN_NAME}
+                component={HomeScreen}
+                options={
+                  {
+                    // header: () => null,
+                  }
                 }
-              }
-            />
-            <Stack.Screen
-              name={EVENT_ITEM_SCREEN_NAME}
-              component={EventItemScreen}
-            />
-            <Stack.Screen
-              name={EVENT_ITEM_EDITOR_SCREEN_NAME}
-              component={EventItemEditorScreen}
-            />
-          </Stack.Navigator>
-        </StorageContextProvider>
-      </NavigationContainer>
-    </ApplicationProvider>
+              />
+              <Stack.Screen
+                name={EVENT_ITEM_SCREEN_NAME}
+                component={EventItemScreen}
+              />
+              <Stack.Screen
+                name={EVENT_ITEM_EDITOR_SCREEN_NAME}
+                component={EventItemEditorScreen}
+              />
+            </Stack.Navigator>
+          </StorageContextProvider>
+        </NavigationContainer>
+      </ApplicationProvider>
+    </>
   );
 }
 
