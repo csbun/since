@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Button} from '@ui-kitten/components';
 import {EVENT_ITEM_EDITOR_SCREEN_NAME} from './EventItemEditor';
 import {KeyframeList} from '../components/KeyframeList';
+import {STYLE} from '../utils/styles';
 
 interface EventItemScreenParams {
   id?: string;
@@ -55,7 +56,7 @@ export default function EventItemScreen(props: Props) {
   }
 
   return (
-    <View>
+    <View style={STYLE.screen}>
       <EventItemView item={eventItem} />
       <KeyframeList eventItem={eventItem} />
     </View>

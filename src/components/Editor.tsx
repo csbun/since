@@ -35,18 +35,21 @@ export default function Editor(props: {
   const formatDateService = new NativeDateService('zh', {format: DATE_FORMAT});
 
   return (
-    <Layout level="1">
+    <Layout style={{padding: 10}}>
       <Input
-        label="Event Name"
+        label="事件"
         onChangeText={t => {
           setTitle(t);
         }}
         value={title}
         status={title !== undefined && title.length === 0 ? 'danger' : 'basic'}
+        style={{marginBottom: 20}}
       />
       <Datepicker
-        label="Date"
-        placeholder={'pick date'}
+        label="日期"
+        placeholder={'请选日期'}
+        min={new Date(0)}
+        max={new Date(6 * 10e11)}
         date={date ? formatDateService.parse(date, DATE_FORMAT) : undefined}
         status={date !== undefined && date.length === 0 ? 'danger' : 'basic'}
         dateService={formatDateService}
@@ -54,6 +57,7 @@ export default function Editor(props: {
           const dateStr = formatDateService.format(nextDate, DATE_FORMAT);
           setDate(dateStr);
         }}
+        style={{marginBottom: 20}}
       />
       <Button
         disabled={!title || !date}

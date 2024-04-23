@@ -2,9 +2,11 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useEventItems} from '../context/EventItems';
 import {useNavigation} from '@react-navigation/native';
-import {Button, List, ListItem, Text} from '@ui-kitten/components';
+import {Button, Divider, List, ListItem, Text} from '@ui-kitten/components';
 import {EVENT_ITEM_EDITOR_SCREEN_NAME} from '../screens/EventItemEditor';
 import {EVENT_ITEM_SCREEN_NAME} from '../screens/EventItem';
+import {daysSinceByItem} from '../utils/calculator';
+import {STYLE} from '../utils/styles';
 
 function CreateButton() {
   const navigation = useNavigation();
@@ -13,7 +15,7 @@ function CreateButton() {
       onPress={() => {
         navigation.navigate(EVENT_ITEM_EDITOR_SCREEN_NAME, {});
       }}>
-      <Text style={styles.createButton}>Create</Text>
+      <Text style={STYLE.textBlob}>创建</Text>
     </Button>
   );
 }
@@ -31,25 +33,36 @@ export default function ListView() {
   }
 
   return (
-    <View>
+    <View style={STYLE.screen}>
       <List
         data={eventItems}
-        renderItem={({item}) => (
-          <ListItem
-            onPress={() => {
-              navigation.navigate(EVENT_ITEM_SCREEN_NAME, {id: item.id});
-            }}>
-            <Text>{item.title}</Text>
-          </ListItem>
-        )}
+        ItemSeparatorComponent={Divider}
+        renderItem={({item}) => {
+          const ds = daysSinceByItem(item);
+          return (
+            <ListItem
+              accessoryRight={() => (
+                <View style={{width: 120}}>
+                  <Text>
+                    {ds.preText}
+                    {ds.diffText}
+                    {ds.postText}
+                  </Text>
+                </View>
+              )}
+              // accessoryRight={<Icon name="arrow-ios-forward-outline" />}
+              title={item.title}
+              description={item.date}
+              onPress={() => {
+                navigation.navigate(EVENT_ITEM_SCREEN_NAME, {id: item.id});
+              }}
+            />
+          );
+        }}
       />
-      <CreateButton />
+      <View style={{padding: 10}}>
+        <CreateButton />
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  createButton: {
-    fontWeight: '700',
-  },
-});

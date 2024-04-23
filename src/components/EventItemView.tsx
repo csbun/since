@@ -1,9 +1,9 @@
 import React from 'react';
 import {daysSinceByItem, formatDate} from '../utils/calculator';
 import {EventItem} from '../context/EventItems';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
-import {BLUE, WHITE, LIGHT_GREY, FLEX_CENTER} from '../utils/styles';
+import {BLUE, WHITE, LIGHT_GREY, STYLE} from '../utils/styles';
 
 interface Props {
   item: EventItem;
@@ -11,30 +11,35 @@ interface Props {
 
 export default function EventItemView(props: Props) {
   const {item} = props;
+  const ds = daysSinceByItem(item);
   return (
-    <View style={styles.bannerContent}>
-      <Text style={styles.textWhite}>{item.title}</Text>
-      <Text style={styles.textWhite}>
-        <Text style={styles.textHuge}>{daysSinceByItem(item)}</Text>
-        <Text>&nbsp;D</Text>
+    <View style={[STYLE.flexCenter, styles.bannerContent]}>
+      <Text style={[STYLE.textWhite, STYLE.textBlob, styles.textTitle]}>
+        {item.title}
       </Text>
-      <Text style={styles.textGray}>Since {formatDate(item.date)}</Text>
-      <Text>{JSON.stringify(item)}</Text>
+      <Text>
+        <Text style={[STYLE.textWhite]}>{ds.preText}</Text>
+        <Text style={[STYLE.textWhite, styles.textHuge]}>{ds.diffText}</Text>
+        <Text style={[STYLE.textWhite, styles.floatText]}>{ds.postText}</Text>
+      </Text>
+      <Text style={STYLE.textGray}>{formatDate(item.date)}</Text>
     </View>
   );
 }
 
-const styles = {
-  bannerContent: {}, //FLEX_CENTER,
-  textWhite: {
-    color: WHITE,
-    // textAlign: 'center',
+const styles = StyleSheet.create({
+  bannerContent: {
+    backgroundColor: BLUE,
+    padding: 20,
   },
-  textGray: {
-    color: LIGHT_GREY,
-    // textAlign: 'center',
+  textTitle: {
+    fontSize: 20,
   },
   textHuge: {
     fontSize: 80,
   },
-};
+  floatText: {
+    width: 0,
+    overflow: 'visible',
+  },
+});

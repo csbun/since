@@ -1,16 +1,24 @@
 import {View, Platform} from 'react-native';
 import * as Permissions from 'react-native-permissions';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
-import {Button, Icon, ListItem, Text} from '@ui-kitten/components';
+import {
+  Button,
+  Divider,
+  Icon,
+  List,
+  ListItem,
+  Text,
+} from '@ui-kitten/components';
 import React from 'react';
 import {DATE_FORMAT, EventItem} from '../context/EventItems';
 import {Keyframe, useKeyframes} from '../context/Keyframes';
 
 function renderAddToCal(options: AddCalendarEvent.CreateOptions) {
   return (
-    <Button
-      size="tiny"
-      accessoryLeft={<Icon name="star" />}
+    <Icon
+      style={{width: 24, height: 24}}
+      fill="#8F9BB3"
+      name="calendar-outline"
       onPress={() => {
         const permission = Platform.select({
           ios: Permissions.PERMISSIONS.IOS.CALENDARS_WRITE_ONLY,
@@ -41,15 +49,15 @@ function renderAddToCal(options: AddCalendarEvent.CreateOptions) {
   );
 }
 
-function KeyframeItem(props: Keyframe) {
+function KeyframeItem(props: {eventItem: EventItem; keyframe: Keyframe}) {
   return (
     <ListItem
-      title={props.date.format(DATE_FORMAT)}
-      description={props.diff + props.diffType}
+      title={props.keyframe.date.format(DATE_FORMAT)}
+      description={props.keyframe.diff + props.keyframe.diffType}
       accessoryRight={() =>
         renderAddToCal({
           title: 'TODO: title',
-          startDate: props.date.format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+          startDate: props.keyframe.date.format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
         })
       }
     />
@@ -59,10 +67,12 @@ function KeyframeItem(props: Keyframe) {
 export function KeyframeList(props: {eventItem: EventItem}) {
   const {keyframes} = useKeyframes(props.eventItem.date);
   return (
-    <View>
-      {keyframes.map(keyframe => (
-        <KeyframeItem key={keyframe.id} {...keyframe} />
-      ))}
-    </View>
+    <List
+      data={keyframes}
+      ItemSeparatorComponent={Divider}
+      renderItem={({item}) => {
+        return <KeyframeItem eventItem={props.eventItem} keyframe={item} />;
+      }}
+    />
   );
 }

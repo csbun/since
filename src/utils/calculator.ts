@@ -10,7 +10,22 @@ export function daysBetween(dTo: ConfigType, dFrom: ConfigType = new Date()) {
 }
 
 export function daysSinceByItem(item: EventItem) {
-  return daysBetween(item.date);
+  const diff = daysBetween(item.date);
+  if (diff === 0) {
+    return {
+      diff,
+      diffText: '今天',
+      preText: '',
+      postText: '',
+    };
+  }
+  return {
+    diff,
+    diffText: Math.abs(diff),
+    preText: diff > 0 ? '倒计时' : '已过去',
+    postText: '天',
+    // color:
+  };
 }
 
 // export function daysFromNow(dTo) {
