@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {useEventItems} from '../context/EventItems';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, List, ListItem, Text} from '@ui-kitten/components';
@@ -26,7 +26,14 @@ export default function ListView() {
 
   if (!eventItems || eventItems.length === 0) {
     return (
-      <View>
+      <View style={{padding: 10}}>
+        <Text
+          style={{
+            textAlign: 'center',
+            margin: 40,
+          }}>
+          点击下面的按钮，创建一个事件吧！
+        </Text>
         <CreateButton />
       </View>
     );

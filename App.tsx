@@ -18,6 +18,7 @@ import EventItemEditorScreen, {
   EVENT_ITEM_EDITOR_SCREEN_NAME,
   EventItemEditorScreenParamList,
 } from './src/screens/EventItemEditor';
+import {BLUE, WHITE} from './src/utils/styles';
 
 type ScreenParamList = HomeScreenParamList &
   EventItemScreenParamList &
@@ -37,19 +38,28 @@ function App(): React.JSX.Element {
               <Stack.Screen
                 name={HOME_SCREEN_NAME}
                 component={HomeScreen}
-                options={
-                  {
-                    // header: () => null,
-                  }
-                }
+                options={{
+                  title: '昔时',
+                }}
               />
               <Stack.Screen
                 name={EVENT_ITEM_SCREEN_NAME}
                 component={EventItemScreen}
+                options={{
+                  headerShadowVisible: false,
+                  headerTintColor: WHITE,
+                  headerStyle: {
+                    backgroundColor: BLUE,
+                  },
+                  title: '',
+                }}
               />
               <Stack.Screen
                 name={EVENT_ITEM_EDITOR_SCREEN_NAME}
                 component={EventItemEditorScreen}
+                options={{
+                  title: '编辑',
+                }}
               />
             </Stack.Navigator>
           </StorageContextProvider>

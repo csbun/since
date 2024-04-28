@@ -17,12 +17,14 @@ export default function EventItemView(props: Props) {
       <Text style={[STYLE.textWhite, STYLE.textBlob, styles.textTitle]}>
         {item.title}
       </Text>
+      <Text style={[STYLE.textGray, styles.textMedium]}>
+        {formatDate(item.date)}
+      </Text>
       <Text>
         <Text style={[STYLE.textWhite]}>{ds.preText}</Text>
         <Text style={[STYLE.textWhite, styles.textHuge]}>{ds.diffText}</Text>
-        <Text style={[STYLE.textWhite, styles.floatText]}>{ds.postText}</Text>
+        <Text style={[STYLE.textWhite]}>{ds.postText}</Text>
       </Text>
-      <Text style={STYLE.textGray}>{formatDate(item.date)}</Text>
     </View>
   );
 }
@@ -34,6 +36,9 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 20,
+  },
+  textMedium: {
+    fontSize: 30,
   },
   textHuge: {
     fontSize: 80,

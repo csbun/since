@@ -70,14 +70,34 @@ function generateFeatureKeyframesByDate(date: Dayjs) {
     const maxDiffYear = date.diff(now, 'year');
     for (let i = 1; i <= maxDiffYear; i++) {
       keyDateList.push(
-        new Keyframe(date.subtract(i, 'year'), 'COUNTDOWN_YEARS', 1),
+        new Keyframe(date.subtract(i, 'year'), 'COUNTDOWN_YEARS', i),
       );
     }
-    const maxDiff100Days = Math.floor(date.diff(now, 'day') / 100);
-    for (let i = 1; i <= maxDiff100Days; i++) {
-      keyDateList.push(
-        new Keyframe(date.subtract(i * 100, 'day'), 'COUNTDOWN_DAYS', i * 100),
-      );
+    const maxDiffDays = date.diff(now, 'day');
+    if (maxDiffDays <= 10) {
+      for (let i = 1; i <= maxDiffDays; i++) {
+        keyDateList.push(
+          new Keyframe(date.subtract(i, 'day'), 'COUNTDOWN_DAYS', i),
+        );
+      }
+    } else if (maxDiffDays <= 100) {
+      const maxDiff10Days = Math.floor(maxDiffDays / 10);
+      for (let i = 1; i <= maxDiff10Days; i++) {
+        keyDateList.push(
+          new Keyframe(date.subtract(i * 10, 'day'), 'COUNTDOWN_DAYS', i * 10),
+        );
+      }
+    } else {
+      const maxDiff100Days = Math.floor(maxDiffDays / 100);
+      for (let i = 1; i <= maxDiff100Days; i++) {
+        keyDateList.push(
+          new Keyframe(
+            date.subtract(i * 100, 'day'),
+            'COUNTDOWN_DAYS',
+            i * 100,
+          ),
+        );
+      }
     }
   }
   return keyDateList.sort((a, b) => a.date.diff(b.date));
