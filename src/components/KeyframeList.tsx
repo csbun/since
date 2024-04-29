@@ -1,23 +1,17 @@
-import {View, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import * as Permissions from 'react-native-permissions';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
-import {
-  Button,
-  Divider,
-  Icon,
-  List,
-  ListItem,
-  Text,
-} from '@ui-kitten/components';
+import {Divider, Icon, List, ListItem} from '@ui-kitten/components';
 import React from 'react';
 import {DATE_FORMAT, EventItem} from '../context/EventItems';
 import {Keyframe, useKeyframes} from '../context/Keyframes';
+import {GREY} from '../utils/styles';
 
 function AddToCal(props: AddCalendarEvent.CreateOptions) {
   return (
     <Icon
       style={{width: 24, height: 24}}
-      fill="#8F9BB3"
+      fill={GREY}
       name="calendar-outline"
       onPress={() => {
         const permission = Platform.select({
@@ -54,8 +48,8 @@ function KeyframeItem(props: {eventItem: EventItem; keyframe: Keyframe}) {
     switch (props.keyframe.diffType) {
       case 'ANNIVERSARY':
         return `${props.keyframe.diff}周年`;
-      case 'HUNDREDS_DAYS':
-        return `${props.keyframe.diff}00天`;
+      case 'PASSED_DAYS':
+        return `${props.keyframe.diff}天`;
       case 'COUNTDOWN_DAYS':
         return `倒计时${props.keyframe.diff}天`;
       case 'COUNTDOWN_YEARS':
@@ -70,9 +64,7 @@ function KeyframeItem(props: {eventItem: EventItem; keyframe: Keyframe}) {
         return (
           <AddToCal
             title={`距离 ${props.eventItem.title}(${props.eventItem.date}) ${desc}`}
-            startDate={props.keyframe.date.format(
-              'YYYY-MM-DDTHH:mm:ss.SSSZ',
-            )}></AddToCal>
+            startDate={props.keyframe.date.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')}></AddToCal>
         );
       }}
     />
