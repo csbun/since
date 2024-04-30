@@ -1,4 +1,4 @@
-package com.since
+package com.icsbun.since
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
