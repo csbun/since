@@ -7,9 +7,7 @@ import uid from '../utils/uid';
  * 从存储中获取指定键对应的值。
  * @param key 需要获取值的键，类型为字符串。
  */
-export async function getAsyncStorageItem<T>(
-  key: string,
-): Promise<T | undefined> {
+export async function getAsyncStorageItem<T>(key: string): Promise<T | undefined> {
   const str = await AsyncStorage.getItem(key);
   if (str) {
     try {
@@ -45,11 +43,7 @@ export const StorageContext = createContext<{
 
 export function StorageContextProvider(props: {children: React.ReactNode}) {
   const [store, setStore] = useState<Record<string, any>>({});
-  return (
-    <StorageContext.Provider value={{store, setStore}}>
-      {props.children}
-    </StorageContext.Provider>
-  );
+  return <StorageContext.Provider value={{store, setStore}}>{props.children}</StorageContext.Provider>;
 }
 
 export function useStorage<T>(name: string, defaultValue: T) {
@@ -73,7 +67,7 @@ export function useStorage<T>(name: string, defaultValue: T) {
     });
   }
 
-  const value = (store[name] as T) || defaultValue;
+  const value = (store[name] as T) ?? defaultValue;
   return {value, setValue};
 }
 
